@@ -232,64 +232,6 @@ const ReportsPage: React.FC = () => {
           </table>
         </div>
       </div>
-
-      {/* Insights */}
-      <div className="card">
-        <h3 className="text-lg font-semibold text-white mb-4">Insights e Recomendações</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-blue-900 bg-opacity-50 rounded-lg p-4 border border-blue-700">
-            <div className="flex items-start space-x-3">
-              <span className="text-blue-400 text-xl">💡</span>
-              <div>
-                <h4 className="text-blue-300 font-medium mb-1">Pico de Movimento</h4>
-                <p className="text-gray-300 text-sm">
-                  O maior volume de check-ins ocorre entre 10:00-11:00. 
-                  Considere adicionar mais pontos de atendimento neste horário.
-                </p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-green-900 bg-opacity-50 rounded-lg p-4 border border-green-700">
-            <div className="flex items-start space-x-3">
-              <TrendingUp size={20} className="text-green-400" />
-              <div>
-                <h4 className="text-green-300 font-medium mb-1">Melhor Performance</h4>
-                <p className="text-gray-300 text-sm">
-                  O Meetup Developers teve a melhor taxa de comparecimento (94%). 
-                  Analise os fatores de sucesso deste evento.
-                </p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-yellow-900 bg-opacity-50 rounded-lg p-4 border border-yellow-700">
-            <div className="flex items-start space-x-3">
-              <AlertTriangle size={20} className="text-yellow-400" />
-              <div>
-                <h4 className="text-yellow-300 font-medium mb-1">Atenção Necessária</h4>
-                <p className="text-gray-300 text-sm">
-                  {reportData.pending} participantes ainda estão pendentes. 
-                  Considere enviar lembretes ou facilitar o processo de check-in.
-                </p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-purple-900 bg-opacity-50 rounded-lg p-4 border border-purple-700">
-            <div className="flex items-start space-x-3">
-              <span className="text-purple-400 text-xl">🎯</span>
-              <div>
-                <h4 className="text-purple-300 font-medium mb-1">Meta de Comparecimento</h4>
-                <p className="text-gray-300 text-sm">
-                  Taxa atual de {Math.round((reportData.checkedIn / reportData.totalParticipants) * 100)}%. 
-                  Meta de 85% pode ser alcançada com melhorias no processo.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
