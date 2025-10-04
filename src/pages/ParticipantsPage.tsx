@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CreateParticipantModal from '../components/CreateParticipantModal';
+import { CheckCircle, Edit, Smartphone, Trash2 } from 'lucide-react';
 
 interface Participant {
   id: string;
@@ -251,17 +252,17 @@ const ParticipantsPage: React.FC = () => {
                             className="text-green-400 hover:text-green-300 text-sm"
                             title="Fazer Check-in"
                           >
-                            ✅
+                            <CheckCircle size={16} />
                           </button>
                         )}
                         <button className="text-blue-400 hover:text-blue-300 text-sm" title="Editar">
-                          ✏️
+                          <Edit size={16} />
                         </button>
                         <button className="text-primary-400 hover:text-primary-300 text-sm" title="Ver QR Code">
-                          📱
+                          <Smartphone size={16} />
                         </button>
                         <button className="text-red-400 hover:text-red-300 text-sm" title="Excluir">
-                          🗑️
+                          <Trash2 size={16} />
                         </button>
                       </div>
                     </td>

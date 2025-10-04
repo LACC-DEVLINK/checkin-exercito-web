@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AlertTriangle, FileSpreadsheet, FileText, TrendingUp } from 'lucide-react';
 
 const ReportsPage: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('today');
@@ -53,15 +54,17 @@ const ReportsPage: React.FC = () => {
           </button>
           <button 
             onClick={() => exportReport('Excel')}
-            className="btn-secondary"
+            className="btn-secondary flex items-center"
           >
-            📊 Excel
+            <FileSpreadsheet size={16} className="mr-2" />
+            Excel
           </button>
           <button 
             onClick={() => exportReport('CSV')}
-            className="btn-primary"
+            className="btn-primary flex items-center"
           >
-            📋 CSV
+            <FileText size={16} className="mr-2" />
+            CSV
           </button>
         </div>
       </div>
@@ -249,7 +252,7 @@ const ReportsPage: React.FC = () => {
           
           <div className="bg-green-900 bg-opacity-50 rounded-lg p-4 border border-green-700">
             <div className="flex items-start space-x-3">
-              <span className="text-green-400 text-xl">📈</span>
+              <TrendingUp size={20} className="text-green-400" />
               <div>
                 <h4 className="text-green-300 font-medium mb-1">Melhor Performance</h4>
                 <p className="text-gray-300 text-sm">
@@ -262,7 +265,7 @@ const ReportsPage: React.FC = () => {
           
           <div className="bg-yellow-900 bg-opacity-50 rounded-lg p-4 border border-yellow-700">
             <div className="flex items-start space-x-3">
-              <span className="text-yellow-400 text-xl">⚠️</span>
+              <AlertTriangle size={20} className="text-yellow-400" />
               <div>
                 <h4 className="text-yellow-300 font-medium mb-1">Atenção Necessária</h4>
                 <p className="text-gray-300 text-sm">

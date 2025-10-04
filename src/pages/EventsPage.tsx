@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Calendar, MapPin, Users, Settings, BarChart3, Smartphone, Mail } from 'lucide-react';
 
 interface Event {
   id: string;
@@ -136,15 +137,15 @@ const EventsPage: React.FC = () => {
             {/* Event Details */}
             <div className="space-y-3 mb-4">
               <div className="flex items-center text-gray-300">
-                <span className="mr-3">📅</span>
+                <Calendar size={16} className="mr-3 text-gray-400" />
                 <span>{formatDate(event.date)} às {event.time}</span>
               </div>
               <div className="flex items-center text-gray-300">
-                <span className="mr-3">📍</span>
+                <MapPin size={16} className="mr-3 text-gray-400" />
                 <span>{event.location}</span>
               </div>
               <div className="flex items-center text-gray-300">
-                <span className="mr-3">👥</span>
+                <Users size={16} className="mr-3 text-gray-400" />
                 <span>{event.registered}/{event.capacity} inscritos</span>
               </div>
             </div>
@@ -190,7 +191,7 @@ const EventsPage: React.FC = () => {
                 </button>
               )}
               <button className="px-3 py-2 text-gray-400 hover:text-white transition-colors">
-                ⚙️
+                <Settings size={16} />
               </button>
             </div>
           </div>
@@ -202,7 +203,7 @@ const EventsPage: React.FC = () => {
         <h3 className="text-lg font-semibold text-white mb-4">Ações Rápidas</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <button className="flex items-center p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-            <span className="text-2xl mr-3">📊</span>
+            <BarChart3 size={24} className="mr-3 text-white" />
             <div className="text-left">
               <p className="text-white font-medium">Relatório de Eventos</p>
               <p className="text-gray-400 text-sm">Exportar dados completos</p>
@@ -210,7 +211,7 @@ const EventsPage: React.FC = () => {
           </button>
           
           <button className="flex items-center p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-            <span className="text-2xl mr-3">📱</span>
+            <Smartphone size={24} className="mr-3 text-white" />
             <div className="text-left">
               <p className="text-white font-medium">Scanner QR Code</p>
               <p className="text-gray-400 text-sm">Check-in em massa</p>
@@ -218,7 +219,7 @@ const EventsPage: React.FC = () => {
           </button>
           
           <button className="flex items-center p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-            <span className="text-2xl mr-3">📧</span>
+            <Mail size={24} className="mr-3 text-white" />
             <div className="text-left">
               <p className="text-white font-medium">Enviar Comunicado</p>
               <p className="text-gray-400 text-sm">E-mail para participantes</p>

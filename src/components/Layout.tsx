@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { BarChart3, Users, Calendar, TrendingUp, Settings, LogOut } from 'lucide-react';
 
 const Layout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -7,11 +8,11 @@ const Layout: React.FC = () => {
   const location = useLocation();
 
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: '📊', path: '/' },
-    { id: 'participants', label: 'Participantes', icon: '👥', path: '/participants' },
-    { id: 'events', label: 'Eventos', icon: '📅', path: '/events' },
-    { id: 'reports', label: 'Relatórios', icon: '📈', path: '/reports' },
-    { id: 'settings', label: 'Configurações', icon: '⚙️', path: '/settings' },
+    { id: 'dashboard', label: 'Dashboard', icon: BarChart3, path: '/' },
+    { id: 'participants', label: 'Participantes', icon: Users, path: '/participants' },
+    { id: 'events', label: 'Eventos', icon: Calendar, path: '/events' },
+    { id: 'reports', label: 'Relatórios', icon: TrendingUp, path: '/reports' },
+    { id: 'settings', label: 'Configurações', icon: Settings, path: '/settings' },
   ];
 
   const handleLogout = () => {
@@ -51,18 +52,21 @@ const Layout: React.FC = () => {
 
         {/* Navigation */}
         <nav className="flex-1 p-4 space-y-2">
-          {menuItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => navigate(item.path)}
-              className={`sidebar-item w-full text-left ${
-                location.pathname === item.path ? 'active' : ''
-              }`}
-            >
-              <span className="text-xl">{item.icon}</span>
-              {sidebarOpen && <span className="ml-3">{item.label}</span>}
-            </button>
-          ))}
+          {menuItems.map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <button
+                key={item.id}
+                onClick={() => navigate(item.path)}
+                className={`sidebar-item w-full text-left ${
+                  location.pathname === item.path ? 'active' : ''
+                }`}
+              >
+                <IconComponent size={20} />
+                {sidebarOpen && <span className="ml-3">{item.label}</span>}
+              </button>
+            );
+          })}
         </nav>
 
         {/* User Profile & Logout */}
@@ -81,9 +85,10 @@ const Layout: React.FC = () => {
           {sidebarOpen && (
             <button
               onClick={handleLogout}
-              className="w-full mt-3 text-left text-red-400 hover:text-red-300 text-sm transition-colors"
+              className="w-full mt-3 text-left text-red-400 hover:text-red-300 text-sm transition-colors flex items-center"
             >
-              🚪 Sair
+              <LogOut size={16} className="mr-2" />
+              Sair
             </button>
           )}
         </div>

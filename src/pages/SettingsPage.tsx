@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { HardDrive, RotateCcw, Bell, Settings, Lock, Smartphone, AlertTriangle } from 'lucide-react';
 
 const SettingsPage: React.FC = () => {
   const [settings, setSettings] = useState({
@@ -74,15 +75,17 @@ const SettingsPage: React.FC = () => {
         <div className="flex space-x-2">
           <button 
             onClick={exportBackup}
-            className="btn-secondary"
+            className="btn-secondary flex items-center"
           >
-            💾 Backup
+            <HardDrive size={16} className="mr-2" />
+            Backup
           </button>
           <button 
             onClick={resetSettings}
-            className="btn-primary"
+            className="btn-primary flex items-center"
           >
-            🔄 Restaurar Padrão
+            <RotateCcw size={16} className="mr-2" />
+            Restaurar Padrão
           </button>
         </div>
       </div>
@@ -92,7 +95,7 @@ const SettingsPage: React.FC = () => {
         {/* Notificações */}
         <div className="card">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <span className="mr-2">🔔</span>
+            <Bell size={20} className="mr-2" />
             Notificações
           </h3>
           <div className="space-y-4">
@@ -189,7 +192,7 @@ const SettingsPage: React.FC = () => {
         {/* Sistema */}
         <div className="card">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <span className="mr-2">⚙️</span>
+            <Settings size={20} className="mr-2" />
             Sistema
           </h3>
           <div className="space-y-4">
@@ -255,7 +258,7 @@ const SettingsPage: React.FC = () => {
         {/* Segurança */}
         <div className="card">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <span className="mr-2">🔒</span>
+            <Lock size={20} className="mr-2" />
             Segurança
           </h3>
           <div className="space-y-4">
@@ -322,7 +325,7 @@ const SettingsPage: React.FC = () => {
         {/* Check-in */}
         <div className="card">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <span className="mr-2">📱</span>
+            <Smartphone size={20} className="mr-2" />
             Check-in
           </h3>
           <div className="space-y-4">
@@ -408,7 +411,7 @@ const SettingsPage: React.FC = () => {
       {/* Danger Zone */}
       <div className="card border-red-700">
         <h3 className="text-lg font-semibold text-red-400 mb-4 flex items-center">
-          <span className="mr-2">⚠️</span>
+          <AlertTriangle size={20} className="mr-2" />
           Zona de Perigo
         </h3>
         <div className="space-y-4">
