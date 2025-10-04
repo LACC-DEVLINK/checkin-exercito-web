@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, CheckCircle, Clock, Calendar, BarChart3, UserPlus, Smartphone } from 'lucide-react';
+import { Users, CheckCircle, Clock, Calendar, BarChart3, UserPlus } from 'lucide-react';
 
 interface DashboardStats {
   totalParticipants: number;
@@ -150,7 +150,7 @@ const DashboardPage: React.FC = () => {
       {/* Quick Actions */}
       <div className="card">
         <h3 className="text-lg font-semibold text-white mb-4">Ações Rápidas</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button className="flex items-center p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
             <BarChart3 size={24} className="mr-3 text-white" />
             <div className="text-left">
@@ -164,14 +164,6 @@ const DashboardPage: React.FC = () => {
             <div className="text-left">
               <p className="text-white font-medium">Adicionar Participante</p>
               <p className="text-gray-400 text-sm">Cadastro manual</p>
-            </div>
-          </button>
-          
-          <button className="flex items-center p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-            <Smartphone size={24} className="mr-3 text-white" />
-            <div className="text-left">
-              <p className="text-white font-medium">Scanner QR Code</p>
-              <p className="text-gray-400 text-sm">Check-in rápido</p>
             </div>
           </button>
         </div>
