@@ -115,24 +115,7 @@ const LoginPage: React.FC = () => {
 
           {/* Offline Mode Toggle */}
           <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-700">
-            <div className="flex items-center">
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={isOfflineMode}
-                  onChange={(e) => setIsOfflineMode(e.target.checked)}
-                  className="sr-only"
-                />
-                <div className={`relative w-10 h-6 rounded-full transition-colors duration-200 ${
-                  isOfflineMode ? 'bg-primary-600' : 'bg-gray-600'
-                }`}>
-                  <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-200 ${
-                    isOfflineMode ? 'translate-x-4' : 'translate-x-0'
-                  }`}></div>
-                </div>
-                <span className="ml-3 text-sm text-gray-300">Modo Offline</span>
-              </label>
-            </div>
+            
             <button
               type="button"
               className="text-primary-400 hover:text-primary-300 text-sm transition-colors duration-200"
