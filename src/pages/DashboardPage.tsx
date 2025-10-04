@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, CheckCircle, Clock, Calendar, BarChart3, UserPlus } from 'lucide-react';
+import { Users, CheckCircle, UserX, BarChart3, UserPlus } from 'lucide-react';
 
 interface DashboardStats {
   totalParticipants: number;
@@ -44,18 +44,11 @@ const DashboardPage: React.FC = () => {
       change: '+8%'
     },
     {
-      title: 'Pendentes',
+      title: 'Ausentes',
       value: stats.pending,
-      icon: Clock,
-      color: 'bg-yellow-600',
+      icon: UserX,
+      color: 'bg-red-600',
       change: '-3%'
-    },
-    {
-      title: 'Eventos Ativos',
-      value: stats.totalEvents,
-      icon: Calendar,
-      color: 'bg-purple-600',
-      change: '+2'
     }
   ];
 
@@ -78,7 +71,7 @@ const DashboardPage: React.FC = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statCards.map((card, index) => (
           <div key={index} className="card hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
