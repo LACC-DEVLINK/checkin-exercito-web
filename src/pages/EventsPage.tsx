@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, Users, Settings, BarChart3, Smartphone, Mail } from 'lucide-react';
+import { Calendar, MapPin, Users, Settings, BarChart3 } from 'lucide-react';
 
 interface Event {
   id: string;
@@ -87,9 +87,17 @@ const EventsPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-white">Eventos</h1>
           <p className="text-gray-400">Gerencie todos os seus eventos</p>
         </div>
-        <button className="btn-primary">
-          + Criar Novo Evento
-        </button>
+        <div className="flex items-center gap-3">
+          <button 
+            className="p-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+            title="Relatório de Eventos"
+          >
+            <BarChart3 size={20} />
+          </button>
+          <button className="btn-primary">
+            + Criar Novo Evento
+          </button>
+        </div>
       </div>
 
       {/* Stats Overview */}
@@ -198,35 +206,7 @@ const EventsPage: React.FC = () => {
         ))}
       </div>
 
-      {/* Quick Actions */}
-      <div className="card">
-        <h3 className="text-lg font-semibold text-white mb-4">Ações Rápidas</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button className="flex items-center p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-            <BarChart3 size={24} className="mr-3 text-white" />
-            <div className="text-left">
-              <p className="text-white font-medium">Relatório de Eventos</p>
-              <p className="text-gray-400 text-sm">Exportar dados completos</p>
-            </div>
-          </button>
-          
-          <button className="flex items-center p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-            <Smartphone size={24} className="mr-3 text-white" />
-            <div className="text-left">
-              <p className="text-white font-medium">Scanner QR Code</p>
-              <p className="text-gray-400 text-sm">Check-in em massa</p>
-            </div>
-          </button>
-          
-          <button className="flex items-center p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-            <Mail size={24} className="mr-3 text-white" />
-            <div className="text-left">
-              <p className="text-white font-medium">Enviar Comunicado</p>
-              <p className="text-gray-400 text-sm">E-mail para participantes</p>
-            </div>
-          </button>
-        </div>
-      </div>
+
     </div>
   );
 };
