@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CreateParticipantModal from '../components/CreateParticipantModal';
-import { CheckCircle, Edit, Smartphone, Trash2, X, QrCode, AlertTriangle, Camera, Upload } from 'lucide-react';
+import { Edit, Smartphone, Trash2, X, QrCode, AlertTriangle, Camera, Upload } from 'lucide-react';
 
 interface Participant {
   id: string;
@@ -142,21 +142,7 @@ const ParticipantsPage: React.FC = () => {
     }
   };
 
-  const handleCheckIn = (participantId: string) => {
-    setParticipants(prev => prev.map(p => 
-      p.id === participantId 
-        ? { ...p, checkInStatus: 'checked-in' as const, checkInTime: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }
-        : p
-    ));
-  };
 
-  const handleCheckOut = (participantId: string) => {
-    setParticipants(prev => prev.map(p => 
-      p.id === participantId 
-        ? { ...p, checkInStatus: 'checked-out' as const, checkOutTime: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }
-        : p
-    ));
-  };
 
   const handleSaveParticipant = (participantData: any) => {
     // Converter os dados do modal para o formato do Participant
@@ -322,24 +308,6 @@ const ParticipantsPage: React.FC = () => {
                     </td>
                     <td className="py-4 px-4">
                       <div className="flex space-x-2">
-                        {participant.checkInStatus === 'pending' && (
-                          <button
-                            onClick={() => handleCheckIn(participant.id)}
-                            className="text-green-400 hover:text-green-300 text-sm"
-                            title="Registrar Entrada"
-                          >
-                            <CheckCircle size={16} />
-                          </button>
-                        )}
-                        {participant.checkInStatus === 'checked-in' && (
-                          <button
-                            onClick={() => handleCheckOut(participant.id)}
-                            className="text-blue-400 hover:text-blue-300 text-sm"
-                            title="Registrar Saída"
-                          >
-                            <CheckCircle size={16} />
-                          </button>
-                        )}
                         <button 
                           onClick={() => handleEditParticipant(participant)}
                           className="text-cyan-400 hover:text-cyan-300 text-sm" 
