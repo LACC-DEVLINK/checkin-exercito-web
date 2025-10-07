@@ -20,11 +20,13 @@ const SettingsPage: React.FC = () => {
       sessionTimeout: '30',
       ipWhitelist: false
     },
-    checkIn: {
+    evento: {
       allowMultiple: false,
       requirePhoto: true,
       autoCheckOut: true,
-      checkOutTime: '18:00'
+      checkOutTime: '17:00',
+      verificarCNH: true,
+      verificarVeiculo: false
     }
   });
 
@@ -69,8 +71,8 @@ const SettingsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Configurações</h1>
-          <p className="text-gray-400">Gerencie as preferências do sistema</p>
+          <h1 className="text-2xl font-bold text-white">Configurações do Sistema</h1>
+          <p className="text-gray-400">Configurações do evento militar e sistema FortAccess</p>
         </div>
         <div className="flex space-x-2">
           <button 

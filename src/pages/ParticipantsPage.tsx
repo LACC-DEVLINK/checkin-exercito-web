@@ -4,12 +4,16 @@ import { CheckCircle, Edit, Smartphone, Trash2 } from 'lucide-react';
 
 interface Participant {
   id: string;
-  name: string;
-  email: string;
-  accessLevel: string;
+  nomeCompleto: string;
+  postoGrad: string;
+  funcao: string;
+  cnh: string;
+  companhiaSecao: string;
+  veiculo: string;
+  situacao: string;
   checkInStatus: 'checked-in' | 'pending' | 'absent';
   checkInTime?: string;
-  event: string;
+  profileImage?: string;
   qrCode: string;
 }
 
@@ -26,50 +30,64 @@ const ParticipantsPage: React.FC = () => {
       setParticipants([
         {
           id: '1',
-          name: 'Maria Santos Silva',
-          email: 'maria.santos@email.com',
-          accessLevel: 'VIP',
+          nomeCompleto: 'Coronel João Silva Santos',
+          postoGrad: 'Coronel',
+          funcao: 'Comandante de Batalhão',
+          cnh: '12345678901',
+          companhiaSecao: 'Comando',
+          veiculo: 'ABC-1234 - Ford Ranger',
+          situacao: 'Ativo',
           checkInStatus: 'checked-in',
-          checkInTime: '09:15',
-          event: 'Tech Conference 2024',
+          checkInTime: '07:30',
           qrCode: 'QR001'
         },
         {
           id: '2',
-          name: 'João Pedro Oliveira',
-          email: 'joao.pedro@email.com',
-          accessLevel: 'Regular',
+          nomeCompleto: 'Major Ana Carolina Lima',
+          postoGrad: 'Major',
+          funcao: 'Oficial de Operações',
+          cnh: '98765432109',
+          companhiaSecao: '1ª Companhia',
+          veiculo: 'DEF-5678 - Toyota Hilux',
+          situacao: 'Ativo',
           checkInStatus: 'pending',
-          event: 'Tech Conference 2024',
           qrCode: 'QR002'
         },
         {
           id: '3',
-          name: 'Ana Carolina Costa',
-          email: 'ana.costa@email.com',
-          accessLevel: 'Premium',
+          nomeCompleto: 'Capitão Pedro Oliveira Costa',
+          postoGrad: 'Capitão',
+          funcao: 'Comandante de Companhia',
+          cnh: '11122233344',
+          companhiaSecao: '2ª Companhia',
+          veiculo: 'GHI-9012 - Chevrolet S10',
+          situacao: 'Ativo',
           checkInStatus: 'checked-in',
-          checkInTime: '08:45',
-          event: 'Workshop AI',
+          checkInTime: '08:15',
           qrCode: 'QR003'
         },
         {
           id: '4',
-          name: 'Carlos Eduardo Lima',
-          email: 'carlos.lima@email.com',
-          accessLevel: 'Regular',
+          nomeCompleto: 'Sargento Carlos Eduardo Rocha',
+          postoGrad: 'Sargento',
+          funcao: 'Instrutor de Tiro',
+          cnh: '55566677788',
+          companhiaSecao: '3ª Companhia',
+          veiculo: 'JKL-3456 - Volkswagen Amarok',
+          situacao: 'Licença',
           checkInStatus: 'absent',
-          event: 'Meetup Developers',
           qrCode: 'QR004'
         },
         {
           id: '5',
-          name: 'Fernanda Rodrigues',
-          email: 'fernanda.r@email.com',
-          accessLevel: 'VIP',
-          checkInStatus: 'checked-in',
-          checkInTime: '10:30',
-          event: 'Tech Conference 2024',
+          nomeCompleto: 'Tenente Fernanda Rodrigues',
+          postoGrad: '1º Tenente',
+          funcao: 'Oficial de Inteligência',
+          cnh: '99988877766',
+          companhiaSecao: 'G-2',
+          veiculo: 'MNO-7890 - Nissan Frontier',
+          situacao: 'Ativo',
+          checkInStatus: 'pending',
           qrCode: 'QR005'
         }
       ]);
@@ -78,8 +96,10 @@ const ParticipantsPage: React.FC = () => {
   }, []);
 
   const filteredParticipants = participants.filter(participant => {
-    const matchesSearch = participant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         participant.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = participant.nomeCompleto.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         participant.postoGrad.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         participant.funcao.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         participant.companhiaSecao.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === 'all' || participant.checkInStatus === filterStatus;
     return matchesSearch && matchesFilter;
   });
@@ -95,19 +115,21 @@ const ParticipantsPage: React.FC = () => {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'checked-in': return 'Check-in Realizado';
-      case 'pending': return 'Pendente';
+      case 'checked-in': return 'Presente';
+      case 'pending': return 'Aguardando';
       case 'absent': return 'Ausente';
       default: return 'N/A';
     }
   };
 
-  const getAccessLevelColor = (level: string) => {
-    switch (level) {
-      case 'VIP': return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'Premium': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'Regular': return 'bg-gray-100 text-gray-800 border-gray-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+  const getSituacaoColor = (situacao: string) => {
+    switch (situacao) {
+      case 'Ativo': return 'border-green-500 text-green-400';
+      case 'Licença': return 'border-yellow-500 text-yellow-400';
+      case 'Férias': return 'border-blue-500 text-blue-400';
+      case 'Afastado': return 'border-red-500 text-red-400';
+      case 'Inativo': return 'border-gray-500 text-gray-400';
+      default: return 'border-gray-500 text-gray-400';
     }
   };
 
@@ -123,11 +145,15 @@ const ParticipantsPage: React.FC = () => {
     // Converter os dados do modal para o formato do Participant
     const newParticipant: Participant = {
       id: participantData.id.toString(),
-      name: participantData.nomeCompleto,
-      email: participantData.email,
-      accessLevel: participantData.nivelAcesso || 'Standard',
+      nomeCompleto: participantData.nomeCompleto,
+      postoGrad: participantData.postoGrad,
+      funcao: participantData.funcao,
+      cnh: participantData.cnh,
+      companhiaSecao: participantData.companhiaSecao,
+      veiculo: participantData.veiculo,
+      situacao: participantData.situacao,
       checkInStatus: 'pending',
-      event: 'Evento Principal',
+      profileImage: participantData.profileImage,
       qrCode: `QR-${participantData.id}`
     };
 
@@ -135,7 +161,7 @@ const ParticipantsPage: React.FC = () => {
     setParticipants(prev => [...prev, newParticipant]);
     
     // Mostrar mensagem de sucesso
-    alert(`Participante ${newParticipant.name} adicionado com sucesso!`);
+    alert(`Participante ${newParticipant.nomeCompleto} adicionado com sucesso!`);
   };
 
   return (
@@ -143,14 +169,14 @@ const ParticipantsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Participantes</h1>
-          <p className="text-gray-400">Gerencie todos os participantes dos eventos</p>
+          <h1 className="text-2xl font-bold text-white">Militares Cadastrados</h1>
+          <p className="text-gray-400">Gerencie todos os militares do evento FortAccess</p>
         </div>
         <button 
           onClick={() => setIsCreateModalOpen(true)}
           className="btn-primary"
         >
-          + Adicionar Participante
+          + Novo Militar
         </button>
       </div>
 
@@ -160,13 +186,13 @@ const ParticipantsPage: React.FC = () => {
           <div className="text-2xl font-bold text-green-500">
             {participants.filter(p => p.checkInStatus === 'checked-in').length}
           </div>
-          <div className="text-gray-400 text-sm">Check-ins Realizados</div>
+          <div className="text-gray-400 text-sm">Militares Presentes</div>
         </div>
         <div className="card text-center">
           <div className="text-2xl font-bold text-yellow-500">
             {participants.filter(p => p.checkInStatus === 'pending').length}
           </div>
-          <div className="text-gray-400 text-sm">Pendentes</div>
+          <div className="text-gray-400 text-sm">Aguardando Entrada</div>
         </div>
         <div className="card text-center">
           <div className="text-2xl font-bold text-red-500">
@@ -182,7 +208,7 @@ const ParticipantsPage: React.FC = () => {
           <div className="flex-1">
             <input
               type="text"
-              placeholder="Buscar por nome ou e-mail..."
+              placeholder="Buscar por nome, posto, função ou companhia..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="input-field w-full"
@@ -194,8 +220,8 @@ const ParticipantsPage: React.FC = () => {
             className="input-field"
           >
             <option value="all">Todos os Status</option>
-            <option value="checked-in">Check-in Realizado</option>
-            <option value="pending">Pendente</option>
+            <option value="checked-in">Presente no Evento</option>
+            <option value="pending">Aguardando Entrada</option>
             <option value="absent">Ausente</option>
           </select>
         </div>
@@ -206,7 +232,7 @@ const ParticipantsPage: React.FC = () => {
         {loading ? (
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto"></div>
-            <p className="text-gray-400 mt-2">Carregando participantes...</p>
+            <p className="text-gray-400 mt-2">Carregando militares cadastrados...</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -214,8 +240,10 @@ const ParticipantsPage: React.FC = () => {
               <thead>
                 <tr className="border-b border-gray-700">
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Nome</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">E-mail</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Nível</th>
+                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Posto/Grad</th>
+                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Função</th>
+                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Companhia/Seção</th>
+                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Situação</th>
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Status</th>
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Check-in</th>
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Ações</th>
@@ -226,14 +254,16 @@ const ParticipantsPage: React.FC = () => {
                   <tr key={participant.id} className="border-b border-gray-700 hover:bg-gray-700">
                     <td className="py-4 px-4">
                       <div>
-                        <div className="text-white font-medium">{participant.name}</div>
-                        <div className="text-gray-400 text-sm">{participant.event}</div>
+                        <div className="text-white font-medium">{participant.nomeCompleto}</div>
+                        <div className="text-gray-400 text-sm">CNH: {participant.cnh || 'N/A'}</div>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-gray-300">{participant.email}</td>
+                    <td className="py-4 px-4 text-gray-300">{participant.postoGrad}</td>
+                    <td className="py-4 px-4 text-gray-300">{participant.funcao}</td>
+                    <td className="py-4 px-4 text-gray-300">{participant.companhiaSecao}</td>
                     <td className="py-4 px-4">
-                      <span className={`px-2 py-1 rounded-full text-xs border ${getAccessLevelColor(participant.accessLevel)}`}>
-                        {participant.accessLevel}
+                      <span className={`px-2 py-1 rounded-full text-xs border ${getSituacaoColor(participant.situacao)}`}>
+                        {participant.situacao}
                       </span>
                     </td>
                     <td className="py-4 px-4">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, Users, Settings, BarChart3 } from 'lucide-react';
+import { Calendar, MapPin, Users, BarChart3 } from 'lucide-react';
 
 interface Event {
   id: string;
@@ -16,44 +16,18 @@ interface Event {
 }
 
 const EventsPage: React.FC = () => {
-  const [events] = useState<Event[]>([
-    {
-      id: '1',
-      name: 'Tech Conference 2024',
-      description: 'A maior conferência de tecnologia do país, reunindo especialistas e inovadores.',
-      date: '2024-12-15',
-      time: '09:00',
-      location: 'Centro de Convenções SP',
-      capacity: 500,
-      registered: 387,
-      checkedIn: 245,
-      status: 'active'
-    },
-    {
-      id: '2',
-      name: 'Workshop de Inteligência Artificial',
-      description: 'Aprenda sobre IA e Machine Learning com especialistas da área.',
-      date: '2024-12-20',
-      time: '14:00',
-      location: 'Auditório TechHub',
-      capacity: 100,
-      registered: 89,
-      checkedIn: 0,
-      status: 'upcoming'
-    },
-    {
-      id: '3',
-      name: 'Meetup Developers',
-      description: 'Encontro casual de desenvolvedores para networking e troca de experiências.',
-      date: '2024-11-30',
-      time: '19:00',
-      location: 'Coworking Innovation',
-      capacity: 50,
-      registered: 50,
-      checkedIn: 47,
-      status: 'completed'
-    }
-  ]);
+  const [currentEvent] = useState<Event>({
+    id: '1',
+    name: 'Evento Militar - FortAccess',
+    description: 'Sistema de controle de acesso e gerenciamento de participantes para evento militar.',
+    date: '2025-10-15',
+    time: '08:00',
+    location: 'Base Militar - Forte de Copacabana',
+    capacity: 200,
+    registered: 89,
+    checkedIn: 34,
+    status: 'active'
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -84,126 +58,121 @@ const EventsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Eventos</h1>
-          <p className="text-gray-400">Gerencie todos os seus eventos</p>
+          <h1 className="text-2xl font-bold text-white">{currentEvent.name}</h1>
+          <p className="text-gray-400">{currentEvent.description}</p>
         </div>
         <div className="flex items-center gap-3">
           <button 
             className="p-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
-            title="Relatório de Eventos"
+            title="Relatório do Evento"
           >
             <BarChart3 size={20} />
           </button>
-          <button className="btn-primary">
-            + Criar Novo Evento
-          </button>
+          <span className={`${getStatusColor(currentEvent.status)} text-white px-4 py-2 rounded-full text-sm font-medium`}>
+            {getStatusText(currentEvent.status)}
+          </span>
+        </div>
+      </div>
+
+      {/* Event Info Card */}
+      <div className="card">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex items-center text-gray-300">
+            <Calendar size={20} className="mr-3 text-cyan-400" />
+            <div>
+              <div className="font-medium text-white">{formatDate(currentEvent.date)}</div>
+              <div className="text-sm text-gray-400">{currentEvent.time}</div>
+            </div>
+          </div>
+          <div className="flex items-center text-gray-300">
+            <MapPin size={20} className="mr-3 text-cyan-400" />
+            <div>
+              <div className="font-medium text-white">Local</div>
+              <div className="text-sm text-gray-400">{currentEvent.location}</div>
+            </div>
+          </div>
+          <div className="flex items-center text-gray-300">
+            <Users size={20} className="mr-3 text-cyan-400" />
+            <div>
+              <div className="font-medium text-white">Capacidade</div>
+              <div className="text-sm text-gray-400">{currentEvent.capacity} pessoas</div>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="card text-center">
-          <div className="text-2xl font-bold text-blue-500">
-            {events.filter(e => e.status === 'active').length}
+          <div className="text-3xl font-bold text-primary-500">
+            {currentEvent.registered}
           </div>
-          <div className="text-gray-400 text-sm">Eventos Ativos</div>
+          <div className="text-gray-400 text-sm">Participantes Cadastrados</div>
         </div>
         <div className="card text-center">
-          <div className="text-2xl font-bold text-green-500">
-            {events.filter(e => e.status === 'upcoming').length}
+          <div className="text-3xl font-bold text-green-500">
+            {currentEvent.checkedIn}
           </div>
-          <div className="text-gray-400 text-sm">Próximos</div>
+          <div className="text-gray-400 text-sm">Check-ins Realizados</div>
         </div>
         <div className="card text-center">
-          <div className="text-2xl font-bold text-primary-500">
-            {events.reduce((sum, e) => sum + e.registered, 0)}
+          <div className="text-3xl font-bold text-yellow-500">
+            {currentEvent.registered - currentEvent.checkedIn}
           </div>
-          <div className="text-gray-400 text-sm">Total Inscritos</div>
-        </div>
-        <div className="card text-center">
-          <div className="text-2xl font-bold text-yellow-500">
-            {events.reduce((sum, e) => sum + e.checkedIn, 0)}
-          </div>
-          <div className="text-gray-400 text-sm">Total Check-ins</div>
+          <div className="text-gray-400 text-sm">Pendentes</div>
         </div>
       </div>
 
-      {/* Events Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {events.map((event) => (
-          <div key={event.id} className="card hover:shadow-xl transition-shadow">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold text-white mb-2">{event.name}</h3>
-                <p className="text-gray-400 text-sm mb-3">{event.description}</p>
-              </div>
-              <span className={`${getStatusColor(event.status)} text-white px-2 py-1 rounded-full text-xs`}>
-                {getStatusText(event.status)}
-              </span>
+      {/* Event Management Card */}
+      <div className="card">
+        <h3 className="text-xl font-semibold text-white mb-6">Gerenciamento do Evento</h3>
+        
+        <div className="space-y-6">
+          {/* Occupancy Progress */}
+          <div>
+            <div className="flex justify-between text-sm text-gray-400 mb-2">
+              <span>Ocupação do Evento</span>
+              <span>{Math.round((currentEvent.registered / currentEvent.capacity) * 100)}% ({currentEvent.registered}/{currentEvent.capacity})</span>
             </div>
-
-            {/* Event Details */}
-            <div className="space-y-3 mb-4">
-              <div className="flex items-center text-gray-300">
-                <Calendar size={16} className="mr-3 text-gray-400" />
-                <span>{formatDate(event.date)} às {event.time}</span>
-              </div>
-              <div className="flex items-center text-gray-300">
-                <MapPin size={16} className="mr-3 text-gray-400" />
-                <span>{event.location}</span>
-              </div>
-              <div className="flex items-center text-gray-300">
-                <Users size={16} className="mr-3 text-gray-400" />
-                <span>{event.registered}/{event.capacity} inscritos</span>
-              </div>
+            <div className="bg-gray-700 rounded-full h-3">
+              <div
+                className="bg-primary-500 h-3 rounded-full transition-all duration-300"
+                style={{ width: `${(currentEvent.registered / currentEvent.capacity) * 100}%` }}
+              ></div>
             </div>
+          </div>
 
-            {/* Progress Bar */}
-            <div className="mb-4">
+          {/* Check-in Progress */}
+          {currentEvent.status === 'active' && (
+            <div>
               <div className="flex justify-between text-sm text-gray-400 mb-2">
-                <span>Ocupação</span>
-                <span>{Math.round((event.registered / event.capacity) * 100)}%</span>
+                <span>Progress do Check-in</span>
+                <span>{Math.round((currentEvent.checkedIn / currentEvent.registered) * 100)}% ({currentEvent.checkedIn}/{currentEvent.registered})</span>
               </div>
-              <div className="bg-gray-700 rounded-full h-2">
+              <div className="bg-gray-700 rounded-full h-3">
                 <div
-                  className="bg-primary-500 h-2 rounded-full"
-                  style={{ width: `${(event.registered / event.capacity) * 100}%` }}
+                  className="bg-green-500 h-3 rounded-full transition-all duration-300"
+                  style={{ width: `${currentEvent.registered > 0 ? (currentEvent.checkedIn / currentEvent.registered) * 100 : 0}%` }}
                 ></div>
               </div>
             </div>
+          )}
 
-            {/* Check-in Status */}
-            {event.status === 'active' && (
-              <div className="mb-4">
-                <div className="flex justify-between text-sm text-gray-400 mb-2">
-                  <span>Check-ins realizados</span>
-                  <span>{event.checkedIn}/{event.registered}</span>
-                </div>
-                <div className="bg-gray-700 rounded-full h-2">
-                  <div
-                    className="bg-green-500 h-2 rounded-full"
-                    style={{ width: `${event.registered > 0 ? (event.checkedIn / event.registered) * 100 : 0}%` }}
-                  ></div>
-                </div>
-              </div>
+          {/* Action Buttons */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+            <button className="btn-primary">
+              Gerenciar Participantes
+            </button>
+            {currentEvent.status === 'active' && (
+              <button className="btn-secondary">
+                Sistema de Check-in
+              </button>
             )}
-
-            {/* Actions */}
-            <div className="flex space-x-2 pt-4 border-t border-gray-700">
-              <button className="flex-1 btn-secondary text-sm">
-                Ver Detalhes
-              </button>
-              {event.status === 'active' && (
-                <button className="flex-1 btn-primary text-sm">
-                  Gerenciar Check-in
-                </button>
-              )}
-              <button className="px-3 py-2 text-gray-400 hover:text-white transition-colors">
-                <Settings size={16} />
-              </button>
-            </div>
+            <button className="btn-secondary">
+              Relatórios
+            </button>
           </div>
-        ))}
+        </div>
       </div>
 
 

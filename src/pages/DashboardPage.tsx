@@ -2,71 +2,78 @@ import React, { useState, useEffect } from 'react';
 import { Users, CheckCircle, UserX, BarChart3, UserPlus } from 'lucide-react';
 
 interface DashboardStats {
-  totalParticipants: number;
+  totalMilitares: number;
   checkedIn: number;
   pending: number;
-  totalEvents: number;
+  capacidadeEvento: number;
 }
 
 const DashboardPage: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats>({
-    totalParticipants: 0,
+    totalMilitares: 0,
     checkedIn: 0,
     pending: 0,
-    totalEvents: 0
+    capacidadeEvento: 0
   });
 
   useEffect(() => {
     // Simular carregamento de dados
     setTimeout(() => {
       setStats({
-        totalParticipants: 1248,
-        checkedIn: 987,
-        pending: 261,
-        totalEvents: 12
+        totalMilitares: 89,
+        checkedIn: 34,
+        pending: 55,
+        capacidadeEvento: 200
       });
     }, 1000);
   }, []);
 
   const statCards = [
     {
-      title: 'Total de Participantes',
-      value: stats.totalParticipants,
+      title: 'Militares Cadastrados',
+      value: stats.totalMilitares,
       icon: Users,
       color: 'bg-blue-600',
       change: '+12%'
     },
     {
-      title: 'Check-ins Realizados',
+      title: 'Presentes no Evento',
       value: stats.checkedIn,
       icon: CheckCircle,
       color: 'bg-green-600',
       change: '+8%'
     },
     {
-      title: 'Ausentes',
+      title: 'Aguardando Entrada',
       value: stats.pending,
-      icon: UserX,
-      color: 'bg-red-600',
-      change: '-3%'
+      icon: UserPlus,
+      color: 'bg-yellow-600',
+      change: '+5%'
+    },
+    {
+      title: 'Capacidade do Evento',
+      value: stats.capacidadeEvento,
+      icon: BarChart3,
+      color: 'bg-cyan-600',
+      change: '100%'
     }
   ];
 
   const recentActivity = [
-    { time: '10:45', user: 'Maria Santos', action: 'Check-in realizado', event: 'Conferência Tech 2024' },
-    { time: '10:42', user: 'João Silva', action: 'Check-in realizado', event: 'Workshop AI' },
-    { time: '10:38', user: 'Ana Costa', action: 'Cadastro atualizado', event: 'Seminário Digital' },
-    { time: '10:35', user: 'Pedro Almeida', action: 'Check-in realizado', event: 'Meetup Developers' },
-    { time: '10:30', user: 'Carlos Oliveira', action: 'Check-in realizado', event: 'Conferência Tech 2024' },
+    { time: '07:45', user: 'Coronel João Silva Santos', action: 'Entrada no evento', event: 'Evento Militar - FortAccess' },
+    { time: '07:42', user: 'Major Ana Carolina Lima', action: 'Cadastro atualizado', event: 'Evento Militar - FortAccess' },
+    { time: '07:38', user: 'Capitão Pedro Oliveira Costa', action: 'Entrada no evento', event: 'Evento Militar - FortAccess' },
+    { time: '07:35', user: 'Tenente Fernanda Rodrigues', action: 'Cadastro realizado', event: 'Evento Militar - FortAccess' },
+    { time: '07:30', user: 'Sargento Carlos Eduardo Rocha', action: 'Veículo registrado', event: 'Evento Militar - FortAccess' },
   ];
 
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl p-6 text-white">
-        <h2 className="text-2xl font-bold mb-2">Bem-vindo ao Sistema Check-in</h2>
+        <h2 className="text-2xl font-bold mb-2">Bem-vindo ao FortAccess</h2>
         <p className="text-primary-100">
-          Monitore e gerencie todos os participantes dos seus eventos em tempo real
+          Sistema de controle de acesso militar. Monitore o evento e gerencie militares em tempo real.
         </p>
       </div>
 
@@ -121,7 +128,7 @@ const DashboardPage: React.FC = () => {
 
         {/* Recent Activity */}
         <div className="card">
-          <h3 className="text-lg font-semibold text-white mb-4">Atividade Recente</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">Atividades do Evento</h3>
           <div className="space-y-4">
             {recentActivity.map((activity, index) => (
               <div key={index} className="flex items-start space-x-3">

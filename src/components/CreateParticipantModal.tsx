@@ -14,21 +14,12 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
 }) => {
   const [formData, setFormData] = useState({
     nomeCompleto: '',
-    documento: '',
-    email: '',
-    instituicao: '',
-    nivelAcesso: '',
-    cargo: 'Convidado Especial',
-    algo: 'Membro/Político',
-    observacoes: '',
-    // Campos do lado direito
-    pagamentoOpcoes: '',
-    beneficiosPossiveis: '',
-    autenticidadeInformacoes: '',
-    infoEspecial: '',
-    especial: '',
-    vagas: '',
-    detalhes: ''
+    postoGrad: '',
+    funcao: '',
+    cnh: '',
+    companhiaSecao: '',
+    veiculo: '',
+    situacao: 'Ativo'
   });
 
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -58,8 +49,8 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
 
   const handleSave = () => {
     // Validação básica
-    if (!formData.nomeCompleto || !formData.email || !formData.documento) {
-      alert('Preencha os campos obrigatórios: Nome, Email e Documento');
+    if (!formData.nomeCompleto || !formData.postoGrad || !formData.funcao) {
+      alert('Preencha os campos obrigatórios: Nome Completo, Posto/Grad e Função');
       return;
     }
 
@@ -76,20 +67,12 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
     // Reset form
     setFormData({
       nomeCompleto: '',
-      documento: '',
-      email: '',
-      instituicao: '',
-      nivelAcesso: '',
-      cargo: 'Convidado Especial',
-      algo: 'Membro/Político',
-      observacoes: '',
-      pagamentoOpcoes: '',
-      beneficiosPossiveis: '',
-      autenticidadeInformacoes: '',
-      infoEspecial: '',
-      especial: '',
-      vagas: '',
-      detalhes: ''
+      postoGrad: '',
+      funcao: '',
+      cnh: '',
+      companhiaSecao: '',
+      veiculo: '',
+      situacao: 'Ativo'
     });
     setProfileImage(null);
   };
@@ -105,7 +88,7 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
             <div className="w-8 h-8 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">+</span>
             </div>
-            <h2 className="text-2xl font-bold text-cyan-400">CADASTRO DE NOVA PESSOA</h2>
+            <h2 className="text-2xl font-bold text-cyan-400">CADASTRO DE MILITAR</h2>
           </div>
           <button
             onClick={onClose}
@@ -134,219 +117,112 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Documento */}
+                {/* Posto/Grad */}
                 <div>
                   <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Documento de Identidade (RG/Passaporte) *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.documento}
-                    onChange={(e) => handleInputChange('documento', e.target.value)}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                    placeholder="RG ou Passaporte"
-                  />
-                </div>
-
-                {/* Pagamento/Opções */}
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Pagamento/Opcionais
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.pagamentoOpcoes}
-                    onChange={(e) => handleInputChange('pagamentoOpcoes', e.target.value)}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                    placeholder="Informações de pagamento"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Email */}
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Email *
-                  </label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                    placeholder="email@exemplo.com"
-                  />
-                </div>
-
-                {/* Benefícios Possíveis */}
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Benefícios Possíveis
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.beneficiosPossiveis}
-                    onChange={(e) => handleInputChange('beneficiosPossiveis', e.target.value)}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                    placeholder="Benefícios disponíveis"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Instituição/Empresa */}
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Instituição/Empresa
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.instituicao}
-                    onChange={(e) => handleInputChange('instituicao', e.target.value)}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                    placeholder="Nome da instituição"
-                  />
-                </div>
-
-                {/* Autenticidade das Informações */}
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Autenticidade das informações
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.autenticidadeInformacoes}
-                    onChange={(e) => handleInputChange('autenticidadeInformacoes', e.target.value)}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                    placeholder="Verificação de autenticidade"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Nível de Acesso */}
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Nível de Acesso
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.nivelAcesso}
-                    onChange={(e) => handleInputChange('nivelAcesso', e.target.value)}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                    placeholder="Nível de acesso"
-                  />
-                </div>
-
-                {/* Informações Especiais */}
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Informações Especiais
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.infoEspecial}
-                    onChange={(e) => handleInputChange('infoEspecial', e.target.value)}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                    placeholder="Informações especiais"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Cargo/Função */}
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Cargo/Função
+                    Posto/Grad *
                   </label>
                   <select
-                    value={formData.cargo}
-                    onChange={(e) => handleInputChange('cargo', e.target.value)}
+                    value={formData.postoGrad}
+                    onChange={(e) => handleInputChange('postoGrad', e.target.value)}
                     className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                   >
-                    <option value="Convidado Especial">Convidado Especial</option>
-                    <option value="Palestrante">Palestrante</option>
-                    <option value="Organizador">Organizador</option>
-                    <option value="Participante">Participante</option>
-                    <option value="VIP">VIP</option>
+                    <option value="">Selecione o posto/graduação</option>
+                    <option value="Soldado">Soldado</option>
+                    <option value="Cabo">Cabo</option>
+                    <option value="Sargento">Sargento</option>
+                    <option value="Subtenente">Subtenente</option>
+                    <option value="Aspirante">Aspirante</option>
+                    <option value="2º Tenente">2º Tenente</option>
+                    <option value="1º Tenente">1º Tenente</option>
+                    <option value="Capitão">Capitão</option>
+                    <option value="Major">Major</option>
+                    <option value="Tenente Coronel">Tenente Coronel</option>
+                    <option value="Coronel">Coronel</option>
+                    <option value="General de Brigada">General de Brigada</option>
+                    <option value="General de Divisão">General de Divisão</option>
+                    <option value="General de Exército">General de Exército</option>
+                    <option value="Marechal">Marechal</option>
                   </select>
                 </div>
 
-                {/* Especial */}
+                {/* Função */}
                 <div>
                   <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Especial
+                    Função *
                   </label>
                   <input
                     type="text"
-                    value={formData.especial}
-                    onChange={(e) => handleInputChange('especial', e.target.value)}
+                    value={formData.funcao}
+                    onChange={(e) => handleInputChange('funcao', e.target.value)}
                     className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                    placeholder="Informação especial"
-                  />
-                </div>
-
-                {/* Vagas */}
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Vagas
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.vagas}
-                    onChange={(e) => handleInputChange('vagas', e.target.value)}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                    placeholder="Número de vagas"
+                    placeholder="Ex: Comandante, Instrutor, Operador"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Algo/Função */}
+                {/* CNH */}
                 <div>
                   <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Algo/Função
-                  </label>
-                  <select
-                    value={formData.algo}
-                    onChange={(e) => handleInputChange('algo', e.target.value)}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                  >
-                    <option value="Membro/Político">Membro/Político</option>
-                    <option value="Empresário">Empresário</option>
-                    <option value="Acadêmico">Acadêmico</option>
-                    <option value="Jornalista">Jornalista</option>
-                    <option value="Outro">Outro</option>
-                  </select>
-                </div>
-
-                {/* Detalhes */}
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Detalhes
+                    CNH
                   </label>
                   <input
                     type="text"
-                    value={formData.detalhes}
-                    onChange={(e) => handleInputChange('detalhes', e.target.value)}
+                    value={formData.cnh}
+                    onChange={(e) => handleInputChange('cnh', e.target.value)}
                     className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                    placeholder="Detalhes adicionais"
+                    placeholder="Número da CNH"
+                  />
+                </div>
+
+                {/* Companhia/Seção */}
+                <div>
+                  <label className="block text-cyan-400 text-sm font-medium mb-2">
+                    Companhia/Seção
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.companhiaSecao}
+                    onChange={(e) => handleInputChange('companhiaSecao', e.target.value)}
+                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                    placeholder="Ex: 1ª Cia, 2ª Seção"
                   />
                 </div>
               </div>
 
-              {/* Observações */}
-              <div>
-                <label className="block text-cyan-400 text-sm font-medium mb-2">
-                  Observações
-                </label>
-                <textarea
-                  value={formData.observacoes}
-                  onChange={(e) => handleInputChange('observacoes', e.target.value)}
-                  rows={4}
-                  className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 resize-none"
-                  placeholder="Observações adicionais..."
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Veículo */}
+                <div>
+                  <label className="block text-cyan-400 text-sm font-medium mb-2">
+                    Veículo
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.veiculo}
+                    onChange={(e) => handleInputChange('veiculo', e.target.value)}
+                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                    placeholder="Placa e modelo do veículo"
+                  />
+                </div>
+
+                {/* Situação */}
+                <div>
+                  <label className="block text-cyan-400 text-sm font-medium mb-2">
+                    Situação
+                  </label>
+                  <select
+                    value={formData.situacao}
+                    onChange={(e) => handleInputChange('situacao', e.target.value)}
+                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                  >
+                    <option value="Ativo">Ativo</option>
+                    <option value="Inativo">Inativo</option>
+                    <option value="Licença">Licença</option>
+                    <option value="Férias">Férias</option>
+                    <option value="Afastado">Afastado</option>
+                  </select>
+                </div>
               </div>
             </div>
 

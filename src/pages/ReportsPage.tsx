@@ -6,28 +6,30 @@ const ReportsPage: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState('all');
 
   const reportData = {
-    totalParticipants: 1248,
-    checkedIn: 987,
-    pending: 261,
-    averageCheckInTime: '9:15',
-    peakHour: '10:00-11:00',
+    totalMilitares: 89,
+    checkedIn: 34,
+    pending: 55,
+    averageCheckInTime: '7:45',
+    peakHour: '07:30-08:30',
     checkInsByHour: [
-      { hour: '08:00', count: 45 },
-      { hour: '09:00', count: 89 },
-      { hour: '10:00', count: 156 },
-      { hour: '11:00', count: 134 },
-      { hour: '12:00', count: 98 },
-      { hour: '13:00', count: 67 },
-      { hour: '14:00', count: 123 },
-      { hour: '15:00', count: 145 },
-      { hour: '16:00', count: 89 },
-      { hour: '17:00', count: 41 }
+      { hour: '07:00', count: 5 },
+      { hour: '07:30', count: 12 },
+      { hour: '08:00', count: 8 },
+      { hour: '08:30', count: 6 },
+      { hour: '09:00', count: 3 },
+      { hour: '09:30', count: 0 },
+      { hour: '10:00', count: 0 },
+      { hour: '10:30', count: 0 }
     ],
     eventStats: [
-      { event: 'Tech Conference 2024', registered: 387, checkedIn: 245, rate: 63.3 },
-      { event: 'Workshop AI', registered: 89, checkedIn: 67, rate: 75.3 },
-      { event: 'Meetup Developers', registered: 50, checkedIn: 47, rate: 94.0 },
-      { event: 'Seminário Digital', registered: 156, checkedIn: 98, rate: 62.8 }
+      { event: 'Evento Militar - FortAccess', registered: 89, checkedIn: 34, rate: 38.2 }
+    ],
+    militaresPorPosto: [
+      { posto: 'Coronel', count: 1 },
+      { posto: 'Major', count: 1 },
+      { posto: 'Capitão', count: 1 },
+      { posto: '1º Tenente', count: 1 },
+      { posto: 'Sargento', count: 1 }
     ]
   };
 
@@ -42,8 +44,8 @@ const ReportsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Relatórios</h1>
-          <p className="text-gray-400">Análise detalhada dos dados de check-in</p>
+          <h1 className="text-2xl font-bold text-white">Relatórios Militares</h1>
+          <p className="text-gray-400">Análise detalhada do evento e participação militar</p>
         </div>
         <div className="flex space-x-2">
           <button 
@@ -111,25 +113,25 @@ const ReportsPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="card text-center">
           <div className="text-3xl font-bold text-blue-500 mb-2">
-            {reportData.totalParticipants.toLocaleString()}
+            {reportData.totalMilitares.toLocaleString()}
           </div>
-          <div className="text-gray-400 text-sm">Total de Participantes</div>
+          <div className="text-gray-400 text-sm">Total de Militares</div>
         </div>
         <div className="card text-center">
           <div className="text-3xl font-bold text-green-500 mb-2">
             {reportData.checkedIn.toLocaleString()}
           </div>
-          <div className="text-gray-400 text-sm">Check-ins Realizados</div>
+          <div className="text-gray-400 text-sm">Presentes no Evento</div>
         </div>
         <div className="card text-center">
           <div className="text-3xl font-bold text-yellow-500 mb-2">
             {reportData.pending.toLocaleString()}
           </div>
-          <div className="text-gray-400 text-sm">Pendentes</div>
+          <div className="text-gray-400 text-sm">Aguardando Entrada</div>
         </div>
         <div className="card text-center">
           <div className="text-3xl font-bold text-primary-500 mb-2">
-            {Math.round((reportData.checkedIn / reportData.totalParticipants) * 100)}%
+            {Math.round((reportData.checkedIn / reportData.totalMilitares) * 100)}%
           </div>
           <div className="text-gray-400 text-sm">Taxa de Comparecimento</div>
         </div>
