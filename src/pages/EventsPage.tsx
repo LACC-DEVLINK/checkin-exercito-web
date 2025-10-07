@@ -102,24 +102,30 @@ const EventsPage: React.FC = () => {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div className="card text-center">
-          <div className="text-3xl font-bold text-primary-500">
+          <div className="text-3xl font-bold text-cyan-500">
             {currentEvent.registered}
           </div>
-          <div className="text-gray-400 text-sm">Participantes Cadastrados</div>
+          <div className="text-gray-400 text-sm">Militares Cadastrados</div>
         </div>
         <div className="card text-center">
           <div className="text-3xl font-bold text-green-500">
             {currentEvent.checkedIn}
           </div>
-          <div className="text-gray-400 text-sm">Check-ins Realizados</div>
+          <div className="text-gray-400 text-sm">Presentes</div>
+        </div>
+        <div className="card text-center">
+          <div className="text-3xl font-bold text-blue-500">
+            1
+          </div>
+          <div className="text-gray-400 text-sm">Saíram</div>
         </div>
         <div className="card text-center">
           <div className="text-3xl font-bold text-yellow-500">
-            {currentEvent.registered - currentEvent.checkedIn}
+            {currentEvent.registered - currentEvent.checkedIn - 1}
           </div>
-          <div className="text-gray-400 text-sm">Pendentes</div>
+          <div className="text-gray-400 text-sm">Aguardando</div>
         </div>
       </div>
 

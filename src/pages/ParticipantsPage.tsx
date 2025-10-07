@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CreateParticipantModal from '../components/CreateParticipantModal';
-import { CheckCircle, Edit, Smartphone, Trash2 } from 'lucide-react';
+import { CheckCircle, Edit, Smartphone, Trash2, X, QrCode, AlertTriangle } from 'lucide-react';
 
 interface Participant {
   id: string;
@@ -11,8 +11,9 @@ interface Participant {
   companhiaSecao: string;
   veiculo: string;
   situacao: string;
-  checkInStatus: 'checked-in' | 'pending' | 'absent';
+  checkInStatus: 'checked-in' | 'checked-out' | 'pending' | 'absent';
   checkInTime?: string;
+  checkOutTime?: string;
   profileImage?: string;
   qrCode: string;
 }
@@ -23,6 +24,10 @@ const ParticipantsPage: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [loading, setLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
 
   useEffect(() => {
     // Simular carregamento de dados
@@ -62,8 +67,9 @@ const ParticipantsPage: React.FC = () => {
           companhiaSecao: '2ª Companhia',
           veiculo: 'GHI-9012 - Chevrolet S10',
           situacao: 'Ativo',
-          checkInStatus: 'checked-in',
+          checkInStatus: 'checked-out',
           checkInTime: '08:15',
+          checkOutTime: '16:45',
           qrCode: 'QR003'
         },
         {
@@ -107,6 +113,7 @@ const ParticipantsPage: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'checked-in': return 'bg-green-600 text-white';
+      case 'checked-out': return 'bg-blue-600 text-white';
       case 'pending': return 'bg-yellow-600 text-white';
       case 'absent': return 'bg-red-600 text-white';
       default: return 'bg-gray-600 text-white';
@@ -116,6 +123,7 @@ const ParticipantsPage: React.FC = () => {
   const getStatusText = (status: string) => {
     switch (status) {
       case 'checked-in': return 'Presente';
+      case 'checked-out': return 'Saiu';
       case 'pending': return 'Aguardando';
       case 'absent': return 'Ausente';
       default: return 'N/A';
@@ -137,6 +145,14 @@ const ParticipantsPage: React.FC = () => {
     setParticipants(prev => prev.map(p => 
       p.id === participantId 
         ? { ...p, checkInStatus: 'checked-in' as const, checkInTime: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }
+        : p
+    ));
+  };
+
+  const handleCheckOut = (participantId: string) => {
+    setParticipants(prev => prev.map(p => 
+      p.id === participantId 
+        ? { ...p, checkInStatus: 'checked-out' as const, checkOutTime: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }
         : p
     ));
   };
@@ -164,6 +180,30 @@ const ParticipantsPage: React.FC = () => {
     alert(`Participante ${newParticipant.nomeCompleto} adicionado com sucesso!`);
   };
 
+  const handleEditParticipant = (participant: Participant) => {
+    setSelectedParticipant(participant);
+    setIsEditModalOpen(true);
+  };
+
+  const handleShowQR = (participant: Participant) => {
+    setSelectedParticipant(participant);
+    setIsQRModalOpen(true);
+  };
+
+  const handleDeleteParticipant = (participant: Participant) => {
+    setSelectedParticipant(participant);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedParticipant) {
+      setParticipants(prev => prev.filter(p => p.id !== selectedParticipant.id));
+      setIsDeleteModalOpen(false);
+      setSelectedParticipant(null);
+      alert(`Militar ${selectedParticipant.nomeCompleto} removido com sucesso!`);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -181,18 +221,24 @@ const ParticipantsPage: React.FC = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div className="card text-center">
           <div className="text-2xl font-bold text-green-500">
             {participants.filter(p => p.checkInStatus === 'checked-in').length}
           </div>
-          <div className="text-gray-400 text-sm">Militares Presentes</div>
+          <div className="text-gray-400 text-sm">Presentes</div>
+        </div>
+        <div className="card text-center">
+          <div className="text-2xl font-bold text-blue-500">
+            {participants.filter(p => p.checkInStatus === 'checked-out').length}
+          </div>
+          <div className="text-gray-400 text-sm">Saíram</div>
         </div>
         <div className="card text-center">
           <div className="text-2xl font-bold text-yellow-500">
             {participants.filter(p => p.checkInStatus === 'pending').length}
           </div>
-          <div className="text-gray-400 text-sm">Aguardando Entrada</div>
+          <div className="text-gray-400 text-sm">Aguardando</div>
         </div>
         <div className="card text-center">
           <div className="text-2xl font-bold text-red-500">
@@ -221,6 +267,7 @@ const ParticipantsPage: React.FC = () => {
           >
             <option value="all">Todos os Status</option>
             <option value="checked-in">Presente no Evento</option>
+            <option value="checked-out">Saiu do Evento</option>
             <option value="pending">Aguardando Entrada</option>
             <option value="absent">Ausente</option>
           </select>
@@ -245,7 +292,8 @@ const ParticipantsPage: React.FC = () => {
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Companhia/Seção</th>
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Situação</th>
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Status</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Check-in</th>
+                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Entrada</th>
+                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Saída</th>
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Ações</th>
                 </tr>
               </thead>
@@ -274,24 +322,48 @@ const ParticipantsPage: React.FC = () => {
                     <td className="py-4 px-4 text-gray-300">
                       {participant.checkInTime || '-'}
                     </td>
+                    <td className="py-4 px-4 text-gray-300">
+                      {participant.checkOutTime || '-'}
+                    </td>
                     <td className="py-4 px-4">
                       <div className="flex space-x-2">
                         {participant.checkInStatus === 'pending' && (
                           <button
                             onClick={() => handleCheckIn(participant.id)}
                             className="text-green-400 hover:text-green-300 text-sm"
-                            title="Fazer Check-in"
+                            title="Registrar Entrada"
                           >
                             <CheckCircle size={16} />
                           </button>
                         )}
-                        <button className="text-blue-400 hover:text-blue-300 text-sm" title="Editar">
+                        {participant.checkInStatus === 'checked-in' && (
+                          <button
+                            onClick={() => handleCheckOut(participant.id)}
+                            className="text-blue-400 hover:text-blue-300 text-sm"
+                            title="Registrar Saída"
+                          >
+                            <CheckCircle size={16} />
+                          </button>
+                        )}
+                        <button 
+                          onClick={() => handleEditParticipant(participant)}
+                          className="text-cyan-400 hover:text-cyan-300 text-sm" 
+                          title="Editar"
+                        >
                           <Edit size={16} />
                         </button>
-                        <button className="text-primary-400 hover:text-primary-300 text-sm" title="Ver QR Code">
+                        <button 
+                          onClick={() => handleShowQR(participant)}
+                          className="text-primary-400 hover:text-primary-300 text-sm" 
+                          title="Ver QR Code"
+                        >
                           <Smartphone size={16} />
                         </button>
-                        <button className="text-red-400 hover:text-red-300 text-sm" title="Excluir">
+                        <button 
+                          onClick={() => handleDeleteParticipant(participant)}
+                          className="text-red-400 hover:text-red-300 text-sm" 
+                          title="Excluir"
+                        >
                           <Trash2 size={16} />
                         </button>
                       </div>
@@ -316,6 +388,229 @@ const ParticipantsPage: React.FC = () => {
         onClose={() => setIsCreateModalOpen(false)}
         onSave={handleSaveParticipant}
       />
+
+      {/* Modal de Edição */}
+      {isEditModalOpen && selectedParticipant && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-slate-800 rounded-xl border border-cyan-500/30 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-6 border-b border-gray-700">
+              <h2 className="text-xl font-bold text-cyan-400">Editar Militar</h2>
+              <button
+                onClick={() => {
+                  setIsEditModalOpen(false);
+                  setSelectedParticipant(null);
+                }}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-cyan-400 text-sm font-medium mb-2">Nome Completo</label>
+                <input
+                  type="text"
+                  defaultValue={selectedParticipant.nomeCompleto}
+                  className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
+                />
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-cyan-400 text-sm font-medium mb-2">Posto/Graduação</label>
+                  <input
+                    type="text"
+                    defaultValue={selectedParticipant.postoGrad}
+                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-cyan-400 text-sm font-medium mb-2">Função</label>
+                  <input
+                    type="text"
+                    defaultValue={selectedParticipant.funcao}
+                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-cyan-400 text-sm font-medium mb-2">CNH</label>
+                  <input
+                    type="text"
+                    defaultValue={selectedParticipant.cnh}
+                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-cyan-400 text-sm font-medium mb-2">Companhia/Seção</label>
+                  <input
+                    type="text"
+                    defaultValue={selectedParticipant.companhiaSecao}
+                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-cyan-400 text-sm font-medium mb-2">Veículo</label>
+                <input
+                  type="text"
+                  defaultValue={selectedParticipant.veiculo}
+                  className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-cyan-400 text-sm font-medium mb-2">Situação</label>
+                <select
+                  defaultValue={selectedParticipant.situacao}
+                  className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
+                >
+                  <option value="Ativo">Ativo</option>
+                  <option value="Licença">Licença</option>
+                  <option value="Férias">Férias</option>
+                  <option value="Afastado">Afastado</option>
+                  <option value="Inativo">Inativo</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex justify-end space-x-4 p-6 border-t border-gray-700">
+              <button
+                onClick={() => {
+                  setIsEditModalOpen(false);
+                  setSelectedParticipant(null);
+                }}
+                className="px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  setIsEditModalOpen(false);
+                  setSelectedParticipant(null);
+                  alert('Dados atualizados com sucesso!');
+                }}
+                className="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-medium transition-colors"
+              >
+                Salvar Alterações
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de QR Code */}
+      {isQRModalOpen && selectedParticipant && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-slate-800 rounded-xl border border-cyan-500/30 max-w-md w-full">
+            <div className="flex items-center justify-between p-6 border-b border-gray-700">
+              <h2 className="text-xl font-bold text-cyan-400">QR Code de Acesso</h2>
+              <button
+                onClick={() => {
+                  setIsQRModalOpen(false);
+                  setSelectedParticipant(null);
+                }}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            
+            <div className="p-6 text-center">
+              <div className="mb-4">
+                <h3 className="text-white font-semibold">{selectedParticipant.nomeCompleto}</h3>
+                <p className="text-gray-400 text-sm">{selectedParticipant.postoGrad} - {selectedParticipant.funcao}</p>
+              </div>
+              
+              <div className="bg-white p-8 rounded-lg mb-4 mx-auto w-fit">
+                <div className="w-48 h-48 bg-gray-200 rounded flex items-center justify-center">
+                  <QrCode size={120} className="text-gray-600" />
+                </div>
+              </div>
+              
+              <div className="text-center text-gray-300 text-sm mb-4">
+                <p>Código: <span className="font-mono text-cyan-400">{selectedParticipant.qrCode}</span></p>
+                <p className="mt-2">Use este QR Code para acesso rápido ao evento</p>
+              </div>
+              
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => alert('QR Code salvo!')}
+                  className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white py-2 rounded-lg font-medium transition-colors"
+                >
+                  Baixar QR Code
+                </button>
+                <button
+                  onClick={() => alert('QR Code impresso!')}
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg font-medium transition-colors"
+                >
+                  Imprimir
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Confirmação de Exclusão */}
+      {isDeleteModalOpen && selectedParticipant && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-slate-800 rounded-xl border border-red-500/30 max-w-md w-full">
+            <div className="flex items-center justify-between p-6 border-b border-gray-700">
+              <div className="flex items-center space-x-3">
+                <AlertTriangle className="text-red-400" size={24} />
+                <h2 className="text-xl font-bold text-red-400">Confirmar Exclusão</h2>
+              </div>
+              <button
+                onClick={() => {
+                  setIsDeleteModalOpen(false);
+                  setSelectedParticipant(null);
+                }}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            
+            <div className="p-6">
+              <div className="mb-6">
+                <p className="text-white mb-2">
+                  Tem certeza que deseja excluir o militar:
+                </p>
+                <div className="bg-gray-700/50 p-3 rounded-lg">
+                  <p className="text-cyan-400 font-semibold">{selectedParticipant.nomeCompleto}</p>
+                  <p className="text-gray-300 text-sm">{selectedParticipant.postoGrad} - {selectedParticipant.funcao}</p>
+                </div>
+                <p className="text-red-400 text-sm mt-3">
+                  ⚠️ Esta ação não pode ser desfeita!
+                </p>
+              </div>
+              
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => {
+                    setIsDeleteModalOpen(false);
+                    setSelectedParticipant(null);
+                  }}
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg font-medium transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-medium transition-colors"
+                >
+                  Excluir Militar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

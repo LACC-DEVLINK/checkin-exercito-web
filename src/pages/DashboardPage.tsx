@@ -33,7 +33,7 @@ const DashboardPage: React.FC = () => {
       title: 'Militares Cadastrados',
       value: stats.totalMilitares,
       icon: Users,
-      color: 'bg-blue-600',
+      color: 'bg-cyan-600',
       change: '+12%'
     },
     {
@@ -44,26 +44,26 @@ const DashboardPage: React.FC = () => {
       change: '+8%'
     },
     {
+      title: 'Saíram do Evento',
+      value: 1,
+      icon: UserX,
+      color: 'bg-blue-600',
+      change: '+1'
+    },
+    {
       title: 'Aguardando Entrada',
       value: stats.pending,
       icon: UserPlus,
       color: 'bg-yellow-600',
       change: '+5%'
-    },
-    {
-      title: 'Capacidade do Evento',
-      value: stats.capacidadeEvento,
-      icon: BarChart3,
-      color: 'bg-cyan-600',
-      change: '100%'
     }
   ];
 
   const recentActivity = [
+    { time: '16:45', user: 'Capitão Pedro Oliveira Costa', action: 'Saída do evento', event: 'Evento Militar - FortAccess' },
+    { time: '08:15', user: 'Capitão Pedro Oliveira Costa', action: 'Entrada no evento', event: 'Evento Militar - FortAccess' },
     { time: '07:45', user: 'Coronel João Silva Santos', action: 'Entrada no evento', event: 'Evento Militar - FortAccess' },
     { time: '07:42', user: 'Major Ana Carolina Lima', action: 'Cadastro atualizado', event: 'Evento Militar - FortAccess' },
-    { time: '07:38', user: 'Capitão Pedro Oliveira Costa', action: 'Entrada no evento', event: 'Evento Militar - FortAccess' },
-    { time: '07:35', user: 'Tenente Fernanda Rodrigues', action: 'Cadastro realizado', event: 'Evento Militar - FortAccess' },
     { time: '07:30', user: 'Sargento Carlos Eduardo Rocha', action: 'Veículo registrado', event: 'Evento Militar - FortAccess' },
   ];
 
