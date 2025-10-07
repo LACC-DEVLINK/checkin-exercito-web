@@ -206,21 +206,18 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
                   />
                 </div>
 
-                {/* Situação */}
+                {/* Status do Militar */}
                 <div>
                   <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Situação
+                    Status do Militar
                   </label>
                   <select
                     value={formData.situacao}
                     onChange={(e) => handleInputChange('situacao', e.target.value)}
                     className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                   >
-                    <option value="Ativo">Ativo</option>
-                    <option value="Inativo">Inativo</option>
-                    <option value="Licença">Licença</option>
-                    <option value="Férias">Férias</option>
-                    <option value="Afastado">Afastado</option>
+                    <option value="Ativo">Presente</option>
+                    <option value="Inativo">Ausente</option>
                   </select>
                 </div>
               </div>

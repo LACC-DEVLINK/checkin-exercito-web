@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CreateParticipantModal from '../components/CreateParticipantModal';
-import { CheckCircle, Edit, Smartphone, Trash2, X, QrCode, AlertTriangle } from 'lucide-react';
+import { CheckCircle, Edit, Smartphone, Trash2, X, QrCode, AlertTriangle, Camera, Upload } from 'lucide-react';
 
 interface Participant {
   id: string;
@@ -132,12 +132,13 @@ const ParticipantsPage: React.FC = () => {
 
   const getSituacaoColor = (situacao: string) => {
     switch (situacao) {
-      case 'Ativo': return 'border-green-500 text-green-400';
-      case 'Licença': return 'border-yellow-500 text-yellow-400';
-      case 'Férias': return 'border-blue-500 text-blue-400';
-      case 'Afastado': return 'border-red-500 text-red-400';
-      case 'Inativo': return 'border-gray-500 text-gray-400';
-      default: return 'border-gray-500 text-gray-400';
+      case 'Ativo': return 'border-green-500 text-green-400 bg-green-900/20';
+      case 'Licença': return 'border-yellow-500 text-yellow-400 bg-yellow-900/20';
+      case 'Férias': return 'border-blue-500 text-blue-400 bg-blue-900/20';
+      case 'Afastado': return 'border-red-500 text-red-400 bg-red-900/20';
+      case 'Inativo': return 'border-gray-500 text-gray-400 bg-gray-900/20';
+      case 'Dispensado': return 'border-purple-500 text-purple-400 bg-purple-900/20';
+      default: return 'border-gray-500 text-gray-400 bg-gray-900/20';
     }
   };
 
@@ -290,8 +291,7 @@ const ParticipantsPage: React.FC = () => {
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Posto/Grad</th>
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Função</th>
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Companhia/Seção</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Situação</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Status</th>
+                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Presença</th>
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Entrada</th>
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Saída</th>
                   <th className="text-left py-3 px-4 text-gray-300 font-medium">Ações</th>
@@ -309,11 +309,6 @@ const ParticipantsPage: React.FC = () => {
                     <td className="py-4 px-4 text-gray-300">{participant.postoGrad}</td>
                     <td className="py-4 px-4 text-gray-300">{participant.funcao}</td>
                     <td className="py-4 px-4 text-gray-300">{participant.companhiaSecao}</td>
-                    <td className="py-4 px-4">
-                      <span className={`px-2 py-1 rounded-full text-xs border ${getSituacaoColor(participant.situacao)}`}>
-                        {participant.situacao}
-                      </span>
-                    </td>
                     <td className="py-4 px-4">
                       <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(participant.checkInStatus)}`}>
                         {getStatusText(participant.checkInStatus)}
@@ -392,9 +387,14 @@ const ParticipantsPage: React.FC = () => {
       {/* Modal de Edição */}
       {isEditModalOpen && selectedParticipant && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-800 rounded-xl border border-cyan-500/30 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-slate-800 rounded-xl border border-cyan-500/30 max-w-6xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-gray-700">
-              <h2 className="text-xl font-bold text-cyan-400">Editar Militar</h2>
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center">
+                  <Edit size={16} className="text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-cyan-400">EDITAR MILITAR</h2>
+              </div>
               <button
                 onClick={() => {
                   setIsEditModalOpen(false);
@@ -406,78 +406,161 @@ const ParticipantsPage: React.FC = () => {
               </button>
             </div>
             
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-cyan-400 text-sm font-medium mb-2">Nome Completo</label>
-                <input
-                  type="text"
-                  defaultValue={selectedParticipant.nomeCompleto}
-                  className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
-                />
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">Posto/Graduação</label>
-                  <input
-                    type="text"
-                    defaultValue={selectedParticipant.postoGrad}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
-                  />
+            <div className="p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Coluna Esquerda - Formulário Principal */}
+                <div className="lg:col-span-2 space-y-6">{/* Nome Completo */}
+                  <div>
+                    <label className="block text-cyan-400 text-sm font-medium mb-2">
+                      Nome Completo *
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={selectedParticipant.nomeCompleto}
+                      className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      placeholder="Digite o nome completo"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Posto/Grad */}
+                    <div>
+                      <label className="block text-cyan-400 text-sm font-medium mb-2">
+                        Posto/Grad *
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue={selectedParticipant.postoGrad}
+                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      />
+                    </div>
+
+                    {/* Função */}
+                    <div>
+                      <label className="block text-cyan-400 text-sm font-medium mb-2">
+                        Função *
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue={selectedParticipant.funcao}
+                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* CNH */}
+                    <div>
+                      <label className="block text-cyan-400 text-sm font-medium mb-2">
+                        CNH
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue={selectedParticipant.cnh}
+                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      />
+                    </div>
+
+                    {/* Companhia/Seção */}
+                    <div>
+                      <label className="block text-cyan-400 text-sm font-medium mb-2">
+                        Companhia/Seção
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue={selectedParticipant.companhiaSecao}
+                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Veículo */}
+                    <div>
+                      <label className="block text-cyan-400 text-sm font-medium mb-2">
+                        Veículo
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue={selectedParticipant.veiculo}
+                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      />
+                    </div>
+
+                    {/* Status do Militar */}
+                    <div>
+                      <label className="block text-cyan-400 text-sm font-medium mb-2">
+                        Status do Militar
+                      </label>
+                      <select
+                        defaultValue={selectedParticipant.situacao}
+                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      >
+                        <option value="Ativo">Presente</option>
+                        <option value="Inativo">Ausente</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">Função</label>
-                  <input
-                    type="text"
-                    defaultValue={selectedParticipant.funcao}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
-                  />
+
+                {/* Coluna Direita - Upload de Foto */}
+                <div className="space-y-6">
+                  {/* Upload de Foto */}
+                  <div className="bg-gray-700/30 border-2 border-dashed border-gray-600 rounded-xl p-6">
+                    <div className="text-center">
+                      <div className="relative">
+                        <div className="w-32 h-32 bg-gray-600 rounded-full mx-auto flex items-center justify-center border-4 border-gray-500 overflow-hidden">
+                          {selectedParticipant.profileImage ? (
+                            <img
+                              src={selectedParticipant.profileImage}
+                              alt="Profile"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <Camera size={40} className="text-gray-400" />
+                          )}
+                        </div>
+                        {selectedParticipant.profileImage && (
+                          <button
+                            onClick={() => {
+                              // Função para remover a foto
+                            }}
+                            className="absolute top-0 right-1/4 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                          >
+                            ×
+                          </button>
+                        )}
+                      </div>
+                      
+                      <h3 className="text-cyan-400 font-semibold mt-4 mb-2">FOTO DO MILITAR</h3>
+                      
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(event) => {
+                          // Handle image upload
+                        }}
+                        className="hidden"
+                        id="photo-upload-edit"
+                      />
+                      <label
+                        htmlFor="photo-upload-edit"
+                        className="inline-flex items-center space-x-2 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg cursor-pointer transition-colors"
+                      >
+                        <Upload size={16} />
+                        <span>Alterar Foto</span>
+                      </label>
+                      
+                      <p className="text-gray-400 text-xs mt-2">
+                        Formatos aceitos: JPG, PNG<br />
+                        Tamanho máximo: 2MB
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">CNH</label>
-                  <input
-                    type="text"
-                    defaultValue={selectedParticipant.cnh}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-cyan-400 text-sm font-medium mb-2">Companhia/Seção</label>
-                  <input
-                    type="text"
-                    defaultValue={selectedParticipant.companhiaSecao}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-cyan-400 text-sm font-medium mb-2">Veículo</label>
-                <input
-                  type="text"
-                  defaultValue={selectedParticipant.veiculo}
-                  className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-cyan-400 text-sm font-medium mb-2">Situação</label>
-                <select
-                  defaultValue={selectedParticipant.situacao}
-                  className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white"
-                >
-                  <option value="Ativo">Ativo</option>
-                  <option value="Licença">Licença</option>
-                  <option value="Férias">Férias</option>
-                  <option value="Afastado">Afastado</option>
-                  <option value="Inativo">Inativo</option>
-                </select>
               </div>
             </div>
-            
+
             <div className="flex justify-end space-x-4 p-6 border-t border-gray-700">
               <button
                 onClick={() => {
