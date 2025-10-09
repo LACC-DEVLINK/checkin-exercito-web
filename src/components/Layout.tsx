@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { BarChart3, Users, Calendar, TrendingUp, Settings, LogOut } from 'lucide-react';
+import { BarChart3, Users, Calendar, TrendingUp, Settings, LogOut, Shield } from 'lucide-react';
 
 const Layout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -10,6 +10,7 @@ const Layout: React.FC = () => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3, path: '/' },
     { id: 'participants', label: 'Participantes', icon: Users, path: '/participants' },
+    { id: 'groups', label: 'Grupos', icon: Shield, path: '/groups' },
     { id: 'events', label: 'Eventos', icon: Calendar, path: '/events' },
     { id: 'reports', label: 'Relatórios', icon: TrendingUp, path: '/reports' },
     { id: 'settings', label: 'Configurações', icon: Settings, path: '/settings' },
