@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import ParticipantsPage from './pages/ParticipantsPage';
+import GroupsPage from './pages/GroupsPage';
 import EventsPage from './pages/EventsPage';
 import ReportsPage from './pages/ReportsPage';
 import SettingsPage from './pages/SettingsPage';
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<DashboardPage />} />
             <Route path="participants" element={<ParticipantsPage />} />
+            <Route path="groups" element={<GroupsPage />} />
             <Route path="events" element={<EventsPage />} />
             <Route path="reports" element={<ReportsPage />} />
             <Route path="settings" element={<SettingsPage />} />

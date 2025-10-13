@@ -39,7 +39,7 @@ const ParticipantsPage: React.FC = () => {
           postoGrad: 'Coronel',
           funcao: 'Comandante de Batalhão',
           cnh: '12345678901',
-          companhiaSecao: 'Comando',
+          companhiaSecao: 'Companhia de Comando e Serviços do Batalhão',
           veiculo: 'ABC-1234 - Ford Ranger',
           situacao: 'Ativo',
           checkInStatus: 'checked-in',
@@ -52,7 +52,7 @@ const ParticipantsPage: React.FC = () => {
           postoGrad: 'Major',
           funcao: 'Oficial de Operações',
           cnh: '98765432109',
-          companhiaSecao: '1ª Companhia',
+          companhiaSecao: '1ª Companhia de Infantaria',
           veiculo: 'DEF-5678 - Toyota Hilux',
           situacao: 'Ativo',
           checkInStatus: 'pending',
@@ -64,7 +64,7 @@ const ParticipantsPage: React.FC = () => {
           postoGrad: 'Capitão',
           funcao: 'Comandante de Companhia',
           cnh: '11122233344',
-          companhiaSecao: '2ª Companhia',
+          companhiaSecao: '2ª Companhia de Infantaria',
           veiculo: 'GHI-9012 - Chevrolet S10',
           situacao: 'Ativo',
           checkInStatus: 'checked-out',
@@ -78,7 +78,7 @@ const ParticipantsPage: React.FC = () => {
           postoGrad: 'Sargento',
           funcao: 'Instrutor de Tiro',
           cnh: '55566677788',
-          companhiaSecao: '3ª Companhia',
+          companhiaSecao: 'Companhia de Engenharia de Combate',
           veiculo: 'JKL-3456 - Volkswagen Amarok',
           situacao: 'Licença',
           checkInStatus: 'absent',
@@ -90,7 +90,7 @@ const ParticipantsPage: React.FC = () => {
           postoGrad: '1º Tenente',
           funcao: 'Oficial de Inteligência',
           cnh: '99988877766',
-          companhiaSecao: 'G-2',
+          companhiaSecao: '1º Grupo de Artilharia de Campanha',
           veiculo: 'MNO-7890 - Nissan Frontier',
           situacao: 'Ativo',
           checkInStatus: 'pending',
@@ -287,9 +287,25 @@ const ParticipantsPage: React.FC = () => {
                 {filteredParticipants.map((participant) => (
                   <tr key={participant.id} className="border-b border-gray-700 hover:bg-gray-700">
                     <td className="py-4 px-4">
-                      <div>
-                        <div className="text-white font-medium">{participant.nomeCompleto}</div>
-                        <div className="text-gray-400 text-sm">CNH: {participant.cnh || 'N/A'}</div>
+                      <div className="flex items-center space-x-4">
+                        {/* Foto do Militar */}
+                        <div className="w-20 h-20 bg-gray-600 rounded-lg flex items-center justify-center border-2 border-gray-500 overflow-hidden flex-shrink-0">
+                          {participant.profileImage ? (
+                            <img
+                              src={participant.profileImage}
+                              alt={`Foto de ${participant.nomeCompleto}`}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <Camera size={24} className="text-gray-400" />
+                          )}
+                        </div>
+                        
+                        {/* Informações do Militar */}
+                        <div>
+                          <div className="text-white font-medium">{participant.nomeCompleto}</div>
+                          <div className="text-gray-400 text-sm">CNH: {participant.cnh || 'N/A'}</div>
+                        </div>
                       </div>
                     </td>
                     <td className="py-4 px-4 text-gray-300">{participant.postoGrad}</td>
@@ -432,13 +448,47 @@ const ParticipantsPage: React.FC = () => {
                     {/* Companhia/Seção */}
                     <div>
                       <label className="block text-cyan-400 text-sm font-medium mb-2">
-                        Companhia/Seção
+                        Companhia/Seção *
                       </label>
-                      <input
-                        type="text"
+                      <select
                         defaultValue={selectedParticipant.companhiaSecao}
-                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                      />
+                        className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                      >
+                        <option value="">Selecione uma Companhia/Seção</option>
+                        
+                        <optgroup label="Companhias de Infantaria">
+                          <option value="1ª Companhia de Infantaria">1ª Companhia de Infantaria</option>
+                          <option value="2ª Companhia de Infantaria">2ª Companhia de Infantaria</option>
+                          <option value="3ª Companhia de Infantaria">3ª Companhia de Infantaria</option>
+                          <option value="Companhia de Comando e Serviços do Batalhão">Companhia de Comando e Serviços do Batalhão</option>
+                        </optgroup>
+                        
+                        <optgroup label="Companhias Especializadas">
+                          <option value="Companhia de Engenharia de Combate">Companhia de Engenharia de Combate</option>
+                          <option value="Companhia de Apoio de Fogo (Artilharia)">Companhia de Apoio de Fogo (Artilharia)</option>
+                          <option value="Companhia de Cavalaria">Companhia de Cavalaria</option>
+                          <option value="Companhia de Comunicações">Companhia de Comunicações</option>
+                          <option value="Companhia de Transporte">Companhia de Transporte</option>
+                        </optgroup>
+                        
+                        <optgroup label="Grupos de Artilharia">
+                          <option value="1º Grupo de Artilharia de Campanha">1º Grupo de Artilharia de Campanha</option>
+                          <option value="2º Grupo de Artilharia de Campanha">2º Grupo de Artilharia de Campanha</option>
+                          <option value="Grupo de Morteiros">Grupo de Morteiros</option>
+                        </optgroup>
+                        
+                        <optgroup label="Companhias de Apoio">
+                          <option value="Companhia de Suprimento">Companhia de Suprimento</option>
+                          <option value="Companhia de Saúde">Companhia de Saúde</option>
+                          <option value="Companhia de Manutenção">Companhia de Manutenção</option>
+                          <option value="Companhia de Intendência">Companhia de Intendência</option>
+                        </optgroup>
+                        
+                        <optgroup label="Companhias de Escolta e Reconhecimento">
+                          <option value="Companhia de Reconhecimento">Companhia de Reconhecimento</option>
+                          <option value="Companhia de Polícia do Exército">Companhia de Polícia do Exército</option>
+                        </optgroup>
+                      </select>
                     </div>
                   </div>
 
@@ -477,7 +527,7 @@ const ParticipantsPage: React.FC = () => {
                   <div className="bg-gray-700/30 border-2 border-dashed border-gray-600 rounded-xl p-6">
                     <div className="text-center">
                       <div className="relative">
-                        <div className="w-32 h-32 bg-gray-600 rounded-full mx-auto flex items-center justify-center border-4 border-gray-500 overflow-hidden">
+                        <div className="w-32 h-32 bg-gray-600 rounded-lg mx-auto flex items-center justify-center border-4 border-gray-500 overflow-hidden">
                           {selectedParticipant.profileImage ? (
                             <img
                               src={selectedParticipant.profileImage}

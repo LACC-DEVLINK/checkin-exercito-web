@@ -179,15 +179,48 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
                 {/* Companhia/Seção */}
                 <div>
                   <label className="block text-cyan-400 text-sm font-medium mb-2">
-                    Companhia/Seção
+                    Companhia/Seção *
                   </label>
-                  <input
-                    type="text"
+                  <select
                     value={formData.companhiaSecao}
                     onChange={(e) => handleInputChange('companhiaSecao', e.target.value)}
-                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                    placeholder="Ex: 1ª Cia, 2ª Seção"
-                  />
+                    className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                  >
+                    <option value="">Selecione uma Companhia/Seção</option>
+                    
+                    <optgroup label="Companhias de Infantaria">
+                      <option value="1ª Companhia de Infantaria">1ª Companhia de Infantaria</option>
+                      <option value="2ª Companhia de Infantaria">2ª Companhia de Infantaria</option>
+                      <option value="3ª Companhia de Infantaria">3ª Companhia de Infantaria</option>
+                      <option value="Companhia de Comando e Serviços do Batalhão">Companhia de Comando e Serviços do Batalhão</option>
+                    </optgroup>
+                    
+                    <optgroup label="Companhias Especializadas">
+                      <option value="Companhia de Engenharia de Combate">Companhia de Engenharia de Combate</option>
+                      <option value="Companhia de Apoio de Fogo (Artilharia)">Companhia de Apoio de Fogo (Artilharia)</option>
+                      <option value="Companhia de Cavalaria">Companhia de Cavalaria</option>
+                      <option value="Companhia de Comunicações">Companhia de Comunicações</option>
+                      <option value="Companhia de Transporte">Companhia de Transporte</option>
+                    </optgroup>
+                    
+                    <optgroup label="Grupos de Artilharia">
+                      <option value="1º Grupo de Artilharia de Campanha">1º Grupo de Artilharia de Campanha</option>
+                      <option value="2º Grupo de Artilharia de Campanha">2º Grupo de Artilharia de Campanha</option>
+                      <option value="Grupo de Morteiros">Grupo de Morteiros</option>
+                    </optgroup>
+                    
+                    <optgroup label="Companhias de Apoio">
+                      <option value="Companhia de Suprimento">Companhia de Suprimento</option>
+                      <option value="Companhia de Saúde">Companhia de Saúde</option>
+                      <option value="Companhia de Manutenção">Companhia de Manutenção</option>
+                      <option value="Companhia de Intendência">Companhia de Intendência</option>
+                    </optgroup>
+                    
+                    <optgroup label="Companhias de Escolta e Reconhecimento">
+                      <option value="Companhia de Reconhecimento">Companhia de Reconhecimento</option>
+                      <option value="Companhia de Polícia do Exército">Companhia de Polícia do Exército</option>
+                    </optgroup>
+                  </select>
                 </div>
               </div>
 
