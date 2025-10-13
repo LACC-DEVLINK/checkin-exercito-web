@@ -1,46 +1,117 @@
-# Getting Started with Create React App
+# CheckIn Exército - Sistema Web Admin
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Sistema web administrativo desenvolvido em React com TypeScript para gerenciamento do sistema de check-in militar. Interface administrativa para controle de participantes, eventos, relatórios e configurações.
 
-## Available Scripts
+## Funcionalidades
 
-In the project directory, you can run:
+- **Dashboard Administrativo**: Visão geral de estatísticas e métricas
+- **Gerenciamento de Participantes**: CRUD completo de participantes
+- **Controle de Eventos**: Criação e administração de eventos militares
+- **Relatórios Avançados**: Geração de relatórios com gráficos interativos
+- **Autenticação**: Sistema de login para administradores
+- **Interface Responsiva**: Compatível com desktop, tablet e mobile
+- **Tema Moderno**: Interface limpa com Tailwind CSS
 
-### `npm start`
+## Como Rodar o Projeto
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Pré-requisitos
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Certifique-se de ter instalado:
 
-### `npm test`
+- **Node.js** (versão 16.x ou superior)
+- **npm** (versão 8.x ou superior) ou **yarn**
+- **Git** para clonagem do repositório
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Verificar Instalação
 
-### `npm run build`
+```bash
+# Verificar versão do Node.js
+node --version
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Verificar versão do npm
+npm --version
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Verificar versão do Git
+git --version
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Configuração do Projeto
 
-### `npm run eject`
+#### 1. **Clonar o Repositório**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**Opção 1: Usando HTTPS**
+```bash
+git clone https://github.com/LACC-DEVLINK/checkin-exercito.git
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Opção 2: Usando SSH (recomendado se você tem chave SSH configurada)**
+```bash
+git clone git@github.com:LACC-DEVLINK/checkin-exercito.git
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### 2. **Navegar até o Projeto Web**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Após clonar, navegue até a pasta do projeto web:
+```bash
+cd checkin-exercito/checkin-exercito-web
+```
 
-## Learn More
+#### 3. **Instalar Dependências**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Execute um dos comandos abaixo para instalar todas as dependências:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Usando npm:**
+```bash
+npm install
+```
+
+**Usando yarn:**
+```bash
+yarn install
+```
+
+### Executando o Projeto
+
+#### Modo Desenvolvimento
+
+Execute o comando para iniciar o servidor de desenvolvimento:
+
+**Com npm:**
+```bash
+npm start
+```
+
+**Com yarn:**
+```bash
+yarn start
+```
+
+O aplicativo será executado em modo de desenvolvimento e estará disponível em:
+- **URL**: [http://localhost:3000](http://localhost:3000)
+- **Modo**: Hot reload ativo (recarrega automaticamente ao fazer alterações)
+
+#### Modo Produção (Build)
+
+Para gerar a build de produção:
+
+**Com npm:**
+```bash
+npm run build
+```
+
+**Com yarn:**
+```bash
+yarn build
+```
+
+#### Executar Testes
+
+**Com npm:**
+```bash
+npm test
+```
+
+**Com yarn:**
+```bash
+yarn test
+```
