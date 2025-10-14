@@ -41,13 +41,15 @@ const DashboardPage: React.FC = () => {
     capacidadeEvento: 0
   });
 
-  // Estados para participantes e notificações
+  // Estados para participantes
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [entryRequests, setEntryRequests] = useState<EntryRequest[]>([]);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState<EntryRequest | null>(null);
   const [notificationCount, setNotificationCount] = useState(0);
-
+  
+  console.log("Teste commit");
+  
   useEffect(() => {
     // Simular carregamento de dados
     setTimeout(() => {
