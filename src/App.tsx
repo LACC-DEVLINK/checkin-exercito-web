@@ -7,6 +7,7 @@ import GroupsPage from './pages/GroupsPage';
 import EventsPage from './pages/EventsPage';
 import ReportsPage from './pages/ReportsPage';
 import SettingsPage from './pages/SettingsPage';
+import OperadoresPage from './pages/OperadoresPage';
 import Layout from './components/Layout';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route path="participants" element={<ParticipantsPage />} />
             <Route path="groups" element={<GroupsPage />} />
             <Route path="events" element={<EventsPage />} />
+            <Route path="operadores" element={<OperadoresPage />} />
             <Route path="reports" element={<ReportsPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
