@@ -308,7 +308,7 @@ const DashboardPage: React.FC = () => {
 
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl p-6 text-white">
-        <h2 className="text-2xl font-bold mb-2">Bem-vindo ao FortAccess</h2>
+        <h2 className="text-2xl font-bold mb-2">Bem-vindo ao Sistema CheckIn</h2>
         <p className="text-primary-100">
           Sistema de controle de acesso militar. Monitore o evento e gerencie militares em tempo real.
         </p>
