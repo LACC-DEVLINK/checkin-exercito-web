@@ -104,20 +104,7 @@ const Layout: React.FC = () => {
             <h1 className="text-xl font-semibold text-white">
               {menuItems.find(item => item.path === location.pathname)?.label || 'Dashboard'}
             </h1>
-            <div className="flex items-center space-x-4">
-              {/* Notifications */}
-              <button className="relative p-2 text-gray-400 hover:text-white transition-colors">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-              </button>
-              
-              {/* Current Time */}
-              <div className="text-gray-400 text-sm">
-                {new Date().toLocaleTimeString('pt-BR')}
-              </div>
-            </div>
+           
           </div>
         </header>
 
