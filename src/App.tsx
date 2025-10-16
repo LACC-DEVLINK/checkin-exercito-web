@@ -6,9 +6,10 @@ import ParticipantsPage from './pages/ParticipantsPage';
 import GroupsPage from './pages/GroupsPage';
 import EventsPage from './pages/EventsPage';
 import ReportsPage from './pages/ReportsPage';
-import SettingsPage from './pages/SettingsPage';
+import AboutPage from './pages/AboutPage';
 import OperadoresPage from './pages/OperadoresPage';
 import Layout from './components/Layout';
+
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
             <Route path="events" element={<EventsPage />} />
             <Route path="operadores" element={<OperadoresPage />} />
             <Route path="reports" element={<ReportsPage />} />
-            <Route path="settings" element={<SettingsPage />} />
+            <Route path="about" element={<AboutPage />} />
           </Route>
         </Routes>
       </div>
