@@ -9,7 +9,7 @@ const Layout: React.FC = () => {
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3, path: '/' },
-    { id: 'participants', label: 'Participantes', icon: Users, path: '/participants' },
+    { id: 'participants', label: 'Militares', icon: Users, path: '/participants' },
     { id: 'groups', label: 'Grupos', icon: Shield, path: '/groups' },
     { id: 'events', label: 'Eventos', icon: Calendar, path: '/events' },
     { id: 'operadores', label: 'Operadores', icon: UserCheck, path: '/operadores' },
