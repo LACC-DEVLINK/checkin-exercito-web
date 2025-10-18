@@ -11,6 +11,7 @@ export interface Military {
   situacao: string;
   profileImage: string | null;
   qrCode: string;
+  qrCodeImage: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -24,6 +25,8 @@ export interface CreateMilitaryDto {
   veiculo?: string;
   situacao?: string;
   profileImage?: string;
+  qrCode?: string;
+  qrCodeImage?: string;
 }
 
 export interface UpdateMilitaryDto {
@@ -35,6 +38,11 @@ export interface UpdateMilitaryDto {
   veiculo?: string;
   situacao?: string;
   profileImage?: string;
+}
+
+export interface QRCodeResponse {
+  code: string;
+  image: string;
 }
 
 class MilitariesService {
@@ -65,6 +73,11 @@ class MilitariesService {
 
   async delete(id: string): Promise<void> {
     await api.delete(`/militaries/${id}`);
+  }
+
+  async generateQRCode(nomeCompleto: string): Promise<QRCodeResponse> {
+    const { data } = await api.post<QRCodeResponse>('/militaries/generate-qrcode', { nomeCompleto });
+    return data;
   }
 }
 
