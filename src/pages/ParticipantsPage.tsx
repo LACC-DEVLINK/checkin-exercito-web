@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CreateParticipantModal from '../components/CreateParticipantModal';
 import { Edit, Smartphone, Trash2, X, QrCode, AlertTriangle, Camera, Upload } from 'lucide-react';
 import militariesService, { Military } from '../services/militaries.service';
+import { useAuth } from '../contexts/AuthContext';
 
 interface Participant extends Military {
   checkInStatus: 'checked-in' | 'checked-out' | 'pending' | 'absent';
@@ -10,6 +11,7 @@ interface Participant extends Military {
 }
 
 const ParticipantsPage: React.FC = () => {
+  const { isAdmin } = useAuth();
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -143,12 +145,14 @@ const ParticipantsPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-white">Militares Cadastrados</h1>
           <p className="text-gray-400">Gerencie todos os militares do evento FortAccess</p>
         </div>
-        <button 
-          onClick={() => setIsCreateModalOpen(true)}
-          className="btn-primary"
-        >
-          + Novo Militar
-        </button>
+        {isAdmin() && (
+          <button 
+            onClick={() => setIsCreateModalOpen(true)}
+            className="btn-primary"
+          >
+            + Novo Militar
+          </button>
+        )}
       </div>
 
       {/* Stats Cards */}
@@ -269,26 +273,30 @@ const ParticipantsPage: React.FC = () => {
                     <td className="py-4 px-4">
                       <div className="flex space-x-2">
                         <button 
-                          onClick={() => handleEditParticipant(participant)}
-                          className="text-cyan-400 hover:text-cyan-300 text-sm" 
-                          title="Editar"
-                        >
-                          <Edit size={16} />
-                        </button>
-                        <button 
                           onClick={() => handleShowQR(participant)}
                           className="text-primary-400 hover:text-primary-300 text-sm" 
                           title="Ver QR Code"
                         >
                           <Smartphone size={16} />
                         </button>
-                        <button 
-                          onClick={() => handleDeleteParticipant(participant)}
-                          className="text-red-400 hover:text-red-300 text-sm" 
-                          title="Excluir"
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                        {isAdmin() && (
+                          <>
+                            <button 
+                              onClick={() => handleEditParticipant(participant)}
+                              className="text-cyan-400 hover:text-cyan-300 text-sm" 
+                              title="Editar"
+                            >
+                              <Edit size={16} />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteParticipant(participant)}
+                              className="text-red-400 hover:text-red-300 text-sm" 
+                              title="Excluir"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>

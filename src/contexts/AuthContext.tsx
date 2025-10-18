@@ -7,6 +7,10 @@ interface AuthContextData {
   isAuthenticated: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
+  isAdmin: () => boolean;
+  isSupervisor: () => boolean;
+  isOperator: () => boolean;
+  hasRole: (roles: string[]) => boolean;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -44,6 +48,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(null);
   };
 
+  const isAdmin = () => user?.role === 'ADMIN';
+  const isSupervisor = () => user?.role === 'SUPERVISOR';
+  const isOperator = () => user?.role === 'OPERATOR';
+  const hasRole = (roles: string[]) => user ? roles.includes(user.role) : false;
+
   return (
     <AuthContext.Provider
       value={{
@@ -52,6 +61,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticated: !!user,
         login,
         logout,
+        isAdmin,
+        isSupervisor,
+        isOperator,
+        hasRole,
       }}
     >
       {children}
