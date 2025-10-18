@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import CreateParticipantModal from '../components/CreateParticipantModal';
 import { Edit, Smartphone, Trash2, X, QrCode, AlertTriangle, Camera, Upload } from 'lucide-react';
+import militariesService, { Military } from '../services/militaries.service';
 
-interface Participant {
-  id: string;
-  nomeCompleto: string;
-  postoGrad: string;
-  funcao: string;
-  cnh: string;
-  companhiaSecao: string;
-  veiculo: string;
-  situacao: string;
+interface Participant extends Military {
   checkInStatus: 'checked-in' | 'checked-out' | 'pending' | 'absent';
   checkInTime?: string;
   checkOutTime?: string;
-  profileImage?: string;
-  qrCode: string;
 }
 
 const ParticipantsPage: React.FC = () => {
@@ -23,6 +14,7 @@ const ParticipantsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
@@ -30,76 +22,26 @@ const ParticipantsPage: React.FC = () => {
   const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
 
   useEffect(() => {
-    // Simular carregamento de dados
-    setTimeout(() => {
-      setParticipants([
-        {
-          id: '1',
-          nomeCompleto: 'Coronel João Silva Santos',
-          postoGrad: 'Coronel',
-          funcao: 'Comandante de Batalhão',
-          cnh: '12345678901',
-          companhiaSecao: 'Companhia de Comando e Serviços do Batalhão',
-          veiculo: 'ABC-1234 - Ford Ranger',
-          situacao: 'Ativo',
-          checkInStatus: 'checked-in',
-          checkInTime: '07:30',
-          qrCode: 'QR001'
-        },
-        {
-          id: '2',
-          nomeCompleto: 'Major Ana Carolina Lima',
-          postoGrad: 'Major',
-          funcao: 'Oficial de Operações',
-          cnh: '98765432109',
-          companhiaSecao: '1ª Companhia de Infantaria',
-          veiculo: 'DEF-5678 - Toyota Hilux',
-          situacao: 'Ativo',
-          checkInStatus: 'pending',
-          qrCode: 'QR002'
-        },
-        {
-          id: '3',
-          nomeCompleto: 'Capitão Pedro Oliveira Costa',
-          postoGrad: 'Capitão',
-          funcao: 'Comandante de Companhia',
-          cnh: '11122233344',
-          companhiaSecao: '2ª Companhia de Infantaria',
-          veiculo: 'GHI-9012 - Chevrolet S10',
-          situacao: 'Ativo',
-          checkInStatus: 'checked-out',
-          checkInTime: '08:15',
-          checkOutTime: '16:45',
-          qrCode: 'QR003'
-        },
-        {
-          id: '4',
-          nomeCompleto: 'Sargento Carlos Eduardo Rocha',
-          postoGrad: 'Sargento',
-          funcao: 'Instrutor de Tiro',
-          cnh: '55566677788',
-          companhiaSecao: 'Companhia de Engenharia de Combate',
-          veiculo: 'JKL-3456 - Volkswagen Amarok',
-          situacao: 'Licença',
-          checkInStatus: 'absent',
-          qrCode: 'QR004'
-        },
-        {
-          id: '5',
-          nomeCompleto: 'Tenente Fernanda Rodrigues',
-          postoGrad: '1º Tenente',
-          funcao: 'Oficial de Inteligência',
-          cnh: '99988877766',
-          companhiaSecao: '1º Grupo de Artilharia de Campanha',
-          veiculo: 'MNO-7890 - Nissan Frontier',
-          situacao: 'Ativo',
-          checkInStatus: 'pending',
-          qrCode: 'QR005'
-        }
-      ]);
-      setLoading(false);
-    }, 1000);
+    loadMilitaries();
   }, []);
+
+  const loadMilitaries = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const data = await militariesService.getAll();
+      const militariesWithStatus = data.map(m => ({
+        ...m,
+        checkInStatus: 'pending' as const,
+      }));
+      setParticipants(militariesWithStatus);
+    } catch (err: any) {
+      setError('Erro ao carregar militares');
+      console.error('Erro:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredParticipants = participants.filter(participant => {
     const matchesSearch = participant.nomeCompleto.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -142,29 +84,24 @@ const ParticipantsPage: React.FC = () => {
     }
   };
 
-
-
-  const handleSaveParticipant = (participantData: any) => {
-    // Converter os dados do modal para o formato do Participant
-    const newParticipant: Participant = {
-      id: participantData.id.toString(),
-      nomeCompleto: participantData.nomeCompleto,
-      postoGrad: participantData.postoGrad,
-      funcao: participantData.funcao,
-      cnh: participantData.cnh,
-      companhiaSecao: participantData.companhiaSecao,
-      veiculo: participantData.veiculo,
-      situacao: participantData.situacao,
-      checkInStatus: 'pending',
-      profileImage: participantData.profileImage,
-      qrCode: `QR-${participantData.id}`
-    };
-
-    // Adicionar à lista de participantes
-    setParticipants(prev => [...prev, newParticipant]);
-    
-    // Mostrar mensagem de sucesso
-    alert(`Participante ${newParticipant.nomeCompleto} adicionado com sucesso!`);
+  const handleSaveParticipant = async (participantData: any) => {
+    try {
+      await militariesService.create({
+        nomeCompleto: participantData.nomeCompleto,
+        postoGrad: participantData.postoGrad,
+        funcao: participantData.funcao,
+        cnh: participantData.cnh,
+        companhiaSecao: participantData.companhiaSecao,
+        veiculo: participantData.veiculo,
+        situacao: participantData.situacao || 'Ativo',
+        profileImage: participantData.profileImage,
+      });
+      
+      await loadMilitaries();
+      alert(`Militar ${participantData.nomeCompleto} cadastrado com sucesso!`);
+    } catch (err: any) {
+      alert(`Erro ao cadastrar militar: ${err.response?.data?.message || 'Erro desconhecido'}`);
+    }
   };
 
   const handleEditParticipant = (participant: Participant) => {
@@ -182,12 +119,17 @@ const ParticipantsPage: React.FC = () => {
     setIsDeleteModalOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (selectedParticipant) {
-      setParticipants(prev => prev.filter(p => p.id !== selectedParticipant.id));
-      setIsDeleteModalOpen(false);
-      setSelectedParticipant(null);
-      alert(`Militar ${selectedParticipant.nomeCompleto} removido com sucesso!`);
+      try {
+        await militariesService.delete(selectedParticipant.id);
+        await loadMilitaries();
+        setIsDeleteModalOpen(false);
+        setSelectedParticipant(null);
+        alert(`Militar ${selectedParticipant.nomeCompleto} removido com sucesso!`);
+      } catch (err: any) {
+        alert(`Erro ao remover militar: ${err.response?.data?.message || 'Erro desconhecido'}`);
+      }
     }
   };
 
@@ -440,7 +382,7 @@ const ParticipantsPage: React.FC = () => {
                       </label>
                       <input
                         type="text"
-                        defaultValue={selectedParticipant.cnh}
+                        defaultValue={selectedParticipant.cnh || ''}
                         className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                       />
                     </div>
@@ -500,7 +442,7 @@ const ParticipantsPage: React.FC = () => {
                       </label>
                       <input
                         type="text"
-                        defaultValue={selectedParticipant.veiculo}
+                        defaultValue={selectedParticipant.veiculo || ''}
                         className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                       />
                     </div>
