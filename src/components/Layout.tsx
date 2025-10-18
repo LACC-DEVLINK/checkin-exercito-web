@@ -29,7 +29,7 @@ const Layout: React.FC = () => {
         <div className="p-4 border-b border-gray-700">
           <div className="flex items-center justify-between">
             <div className={`flex items-center ${!sidebarOpen && 'justify-center'}`}>
-              <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+              <div className={`${sidebarOpen ? 'w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center' : 'hidden'}`}>
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
@@ -53,20 +53,22 @@ const Layout: React.FC = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-15 space-y-1">
           {menuItems.map((item) => {
             const IconComponent = item.icon;
             return (
+              <div title={`${!sidebarOpen ? item.label : ''}`}>
               <button
                 key={item.id}
                 onClick={() => navigate(item.path)}
                 className={`sidebar-item w-full text-left ${
-                  location.pathname === item.path ? 'active' : ''
-                }`}
+                  location.pathname === item.path ? 'active' : '' 
+                } ${!sidebarOpen ? 'justify-center' : ''}`}
               >
                 <IconComponent size={20} />
                 {sidebarOpen && <span className="ml-3">{item.label}</span>}
               </button>
+              </div>
             );
           })}
         </nav>

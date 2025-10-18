@@ -90,7 +90,7 @@ const AboutPage = function(){
                   <br />
                   - Diego Prestes Cohen;
                   <br />
-                  - Felipe Ricardo Teles Sauma;
+                  - Felipe Teles Ferreira Lopes;
                 </div>
               </div>
             </div>
