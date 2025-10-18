@@ -95,6 +95,8 @@ const ParticipantsPage: React.FC = () => {
         veiculo: participantData.veiculo,
         situacao: participantData.situacao || 'Ativo',
         profileImage: participantData.profileImage,
+        qrCode: participantData.qrCode,
+        qrCodeImage: participantData.qrCodeImage,
       });
       
       await loadMilitaries();
@@ -570,9 +572,17 @@ const ParticipantsPage: React.FC = () => {
               </div>
               
               <div className="bg-white p-8 rounded-lg mb-4 mx-auto w-fit">
-                <div className="w-48 h-48 bg-gray-200 rounded flex items-center justify-center">
-                  <QrCode size={120} className="text-gray-600" />
-                </div>
+                {selectedParticipant.qrCodeImage ? (
+                  <img 
+                    src={selectedParticipant.qrCodeImage} 
+                    alt={`QR Code de ${selectedParticipant.nomeCompleto}`}
+                    className="w-48 h-48 object-contain"
+                  />
+                ) : (
+                  <div className="w-48 h-48 bg-gray-200 rounded flex items-center justify-center">
+                    <QrCode size={120} className="text-gray-600" />
+                  </div>
+                )}
               </div>
               
               <div className="text-center text-gray-300 text-sm mb-4">
@@ -582,14 +592,68 @@ const ParticipantsPage: React.FC = () => {
               
               <div className="flex space-x-3">
                 <button
-                  onClick={() => alert('QR Code salvo!')}
-                  className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white py-2 rounded-lg font-medium transition-colors"
+                  onClick={() => {
+                    if (selectedParticipant.qrCodeImage) {
+                      const link = document.createElement('a');
+                      link.href = selectedParticipant.qrCodeImage;
+                      link.download = `qrcode-${selectedParticipant.nomeCompleto.replace(/\s+/g, '-')}.png`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }
+                  }}
+                  disabled={!selectedParticipant.qrCodeImage}
+                  className={`flex-1 py-2 rounded-lg font-medium transition-colors ${
+                    selectedParticipant.qrCodeImage
+                      ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
+                      : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  }`}
                 >
                   Baixar QR Code
                 </button>
                 <button
-                  onClick={() => alert('QR Code impresso!')}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg font-medium transition-colors"
+                  onClick={() => {
+                    if (selectedParticipant.qrCodeImage) {
+                      const printWindow = window.open('', '_blank');
+                      if (printWindow) {
+                        printWindow.document.write(`
+                          <html>
+                            <head>
+                              <title>QR Code - ${selectedParticipant.nomeCompleto}</title>
+                              <style>
+                                body {
+                                  display: flex;
+                                  flex-direction: column;
+                                  align-items: center;
+                                  justify-content: center;
+                                  height: 100vh;
+                                  margin: 0;
+                                  font-family: Arial, sans-serif;
+                                }
+                                h2 { margin: 10px 0; }
+                                p { margin: 5px 0; color: #666; }
+                                img { border: 2px solid #000; padding: 20px; }
+                              </style>
+                            </head>
+                            <body>
+                              <h2>${selectedParticipant.nomeCompleto}</h2>
+                              <p>${selectedParticipant.postoGrad} - ${selectedParticipant.funcao}</p>
+                              <img src="${selectedParticipant.qrCodeImage}" alt="QR Code" />
+                              <p><strong>Código:</strong> ${selectedParticipant.qrCode}</p>
+                            </body>
+                          </html>
+                        `);
+                        printWindow.document.close();
+                        printWindow.print();
+                      }
+                    }
+                  }}
+                  disabled={!selectedParticipant.qrCodeImage}
+                  className={`flex-1 py-2 rounded-lg font-medium transition-colors ${
+                    selectedParticipant.qrCodeImage
+                      ? 'bg-gray-600 hover:bg-gray-700 text-white'
+                      : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  }`}
                 >
                   Imprimir
                 </button>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, Camera, QrCode, Upload } from 'lucide-react';
+import { X, Camera, QrCode, Upload, AlertCircle, Check } from 'lucide-react';
+import militariesService from '../services/militaries.service';
 
 interface CreateParticipantModalProps {
   isOpen: boolean;
@@ -23,6 +24,9 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
   });
 
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [qrCodeData, setQrCodeData] = useState<{ code: string; image: string } | null>(null);
+  const [isGeneratingQR, setIsGeneratingQR] = useState(false);
+  const [qrError, setQrError] = useState<string | null>(null);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -42,23 +46,56 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
     }
   };
 
-  const generateQRCode = () => {
-    // Simular geração de QR Code
-    alert('QR Code gerado com sucesso!');
+  const generateQRCode = async () => {
+    // Validar campos obrigatórios antes de gerar QR Code
+    if (!formData.nomeCompleto) {
+      setQrError('Preencha o Nome Completo antes de gerar o QR Code');
+      return;
+    }
+    if (!formData.postoGrad) {
+      setQrError('Selecione o Posto/Grad antes de gerar o QR Code');
+      return;
+    }
+    if (!formData.funcao) {
+      setQrError('Preencha a Função antes de gerar o QR Code');
+      return;
+    }
+    if (!formData.companhiaSecao) {
+      setQrError('Selecione a Companhia/Seção antes de gerar o QR Code');
+      return;
+    }
+
+    setQrError(null);
+    setIsGeneratingQR(true);
+
+    try {
+      const qrData = await militariesService.generateQRCode(formData.nomeCompleto);
+      setQrCodeData(qrData);
+    } catch (error: any) {
+      setQrError(error.response?.data?.message || 'Erro ao gerar QR Code. Tente novamente.');
+    } finally {
+      setIsGeneratingQR(false);
+    }
   };
 
   const handleSave = () => {
     // Validação básica
-    if (!formData.nomeCompleto || !formData.postoGrad || !formData.funcao) {
-      alert('Preencha os campos obrigatórios: Nome Completo, Posto/Grad e Função');
+    if (!formData.nomeCompleto || !formData.postoGrad || !formData.funcao || !formData.companhiaSecao) {
+      alert('Preencha os campos obrigatórios: Nome Completo, Posto/Grad, Função e Companhia/Seção');
+      return;
+    }
+
+    // Validar se QR Code foi gerado
+    if (!qrCodeData) {
+      alert('Gere o QR Code antes de salvar o participante');
       return;
     }
 
     const participant = {
       ...formData,
-      id: Date.now(),
-      profileImage,
-      createdAt: new Date().toISOString()
+      qrCode: qrCodeData.code,
+      qrCodeImage: qrCodeData.image,
+      profileImage
     };
 
     onSave(participant);
@@ -75,6 +112,8 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
       situacao: 'Ativo'
     });
     setProfileImage(null);
+    setQrCodeData(null);
+    setQrError(null);
   };
 
   if (!isOpen) return null;
@@ -308,21 +347,72 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
               {/* Geração de QR Code */}
               <div className="bg-gray-700/30 border border-gray-600 rounded-xl p-6">
                 <div className="text-center">
-                  <div className="w-32 h-32 bg-gray-600 rounded-lg mx-auto flex items-center justify-center border border-gray-500 mb-4">
-                    <QrCode size={60} className="text-gray-400" />
+                  <div className="w-32 h-32 bg-gray-600 rounded-lg mx-auto flex items-center justify-center border border-gray-500 mb-4 overflow-hidden">
+                    {qrCodeData ? (
+                      <img 
+                        src={qrCodeData.image} 
+                        alt="QR Code" 
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <QrCode size={60} className="text-gray-400" />
+                    )}
                   </div>
+                  
+                  {qrError && (
+                    <div className="mb-3 p-2 bg-red-500/20 border border-red-500 rounded text-red-400 text-xs flex items-center justify-center space-x-1">
+                      <AlertCircle size={14} />
+                      <span>{qrError}</span>
+                    </div>
+                  )}
+                  
+                  {qrCodeData && (
+                    <div className="mb-3 p-2 bg-green-500/20 border border-green-500 rounded text-green-400 text-xs flex items-center justify-center space-x-1">
+                      <Check size={14} />
+                      <span>QR Code gerado com sucesso!</span>
+                    </div>
+                  )}
                   
                   <button
                     onClick={generateQRCode}
-                    className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+                    disabled={isGeneratingQR || !!qrCodeData}
+                    className={`w-full py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 ${
+                      qrCodeData 
+                        ? 'bg-green-600 text-white cursor-not-allowed' 
+                        : isGeneratingQR
+                        ? 'bg-gray-600 text-gray-400 cursor-wait'
+                        : 'bg-cyan-600 hover:bg-cyan-700 text-white'
+                    }`}
                   >
-                    <QrCode size={20} />
-                    <span>GERAR QR CODE</span>
+                    {isGeneratingQR ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                        <span>GERANDO...</span>
+                      </>
+                    ) : qrCodeData ? (
+                      <>
+                        <Check size={20} />
+                        <span>QR CODE GERADO</span>
+                      </>
+                    ) : (
+                      <>
+                        <QrCode size={20} />
+                        <span>GERAR QR CODE</span>
+                      </>
+                    )}
                   </button>
                   
-                  <p className="text-gray-400 text-xs mt-3">
-                    QR Code será gerado automaticamente após salvar o participante
-                  </p>
+                  {qrCodeData && (
+                    <p className="text-green-400 text-xs mt-3 font-mono break-all">
+                      Código: {qrCodeData.code}
+                    </p>
+                  )}
+                  
+                  {!qrCodeData && (
+                    <p className="text-gray-400 text-xs mt-3">
+                      Preencha os campos obrigatórios e clique para gerar o QR Code
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -336,7 +426,9 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
                   </div>
                   <div className="flex justify-between">
                     <span>Status:</span>
-                    <span className="text-yellow-400">Pendente</span>
+                    <span className={qrCodeData ? 'text-green-400' : 'text-yellow-400'}>
+                      {qrCodeData ? 'QR Code Gerado' : 'Pendente QR Code'}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span>ID:</span>
@@ -357,9 +449,14 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
             </button>
             <button
               onClick={handleSave}
-              className="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-medium transition-colors"
+              disabled={!qrCodeData}
+              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+                qrCodeData
+                  ? 'bg-cyan-600 hover:bg-cyan-700 text-white'
+                  : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+              }`}
             >
-              Salvar Participante
+              {qrCodeData ? 'Salvar Participante' : 'Gere o QR Code para Salvar'}
             </button>
           </div>
         </div>
