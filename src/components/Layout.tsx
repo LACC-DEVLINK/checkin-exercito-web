@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { BarChart3, Users, Calendar, TrendingUp, Settings, LogOut, Shield, UserCheck, Info } from 'lucide-react';
+import { BarChart3, Users, Calendar, TrendingUp, LogOut, Shield, UserCheck, Info } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 const Layout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, logout } = useAuth();
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3, path: '/' },
@@ -17,7 +19,8 @@ const Layout: React.FC = () => {
     { id: 'settings', label: 'Sobre', icon: Info, path: '/about' },
   ];
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
   };
 
@@ -75,12 +78,14 @@ const Layout: React.FC = () => {
         <div className="p-4 border-t border-gray-700">
           <div className={`flex items-center ${!sidebarOpen && 'justify-center'}`}>
             <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-medium">A</span>
+              <span className="text-white text-sm font-medium">
+                {user?.name?.charAt(0).toUpperCase() || 'U'}
+              </span>
             </div>
             {sidebarOpen && (
               <div className="ml-3 flex-1">
-                <p className="text-white text-sm font-medium">Admin</p>
-                <p className="text-gray-400 text-xs">Administrador</p>
+                <p className="text-white text-sm font-medium">{user?.name || 'Usuário'}</p>
+                <p className="text-gray-400 text-xs">{user?.role || 'Operador'}</p>
               </div>
             )}
           </div>
