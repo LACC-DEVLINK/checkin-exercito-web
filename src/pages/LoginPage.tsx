@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Mail, CheckCircle, AlertTriangle } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 const LoginPage: React.FC = () => {
   const [credentials, setCredentials] = useState({
@@ -9,11 +10,13 @@ const LoginPage: React.FC = () => {
   });
   const [isOfflineMode, setIsOfflineMode] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
   const [resetEmailSent, setResetEmailSent] = useState(false);
   const [forgotPasswordLoading, setForgotPasswordLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,12 +29,17 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
     
-    // Simular login
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await login(credentials);
       navigate('/');
-    }, 1000);
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Credenciais inválidas';
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleForgotPassword = async (e: React.FormEvent) => {
@@ -87,6 +95,14 @@ const LoginPage: React.FC = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg flex items-center space-x-2">
+                <AlertTriangle size={16} />
+                <span className="text-sm">{error}</span>
+              </div>
+            )}
+
             {/* Email/Username Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
