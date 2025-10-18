@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Camera, QrCode, Upload, AlertCircle, Check } from 'lucide-react';
 import militariesService from '../services/militaries.service';
+import { compressImageFile, isValidImageFile } from '../utils/imageCompression';
 
 interface CreateParticipantModalProps {
   isOpen: boolean;
@@ -35,14 +36,34 @@ const CreateParticipantModal: React.FC<CreateParticipantModalProps> = ({
     }));
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setProfileImage(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    // Validar tipo de arquivo
+    if (!isValidImageFile(file)) {
+      alert('Por favor, selecione uma imagem válida (JPEG, PNG, GIF ou WebP)');
+      return;
+    }
+
+    // Validar tamanho do arquivo (máximo 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('A imagem é muito grande. Por favor, selecione uma imagem menor que 5MB');
+      return;
+    }
+
+    try {
+      // Comprimir imagem antes de exibir
+      const compressedBase64 = await compressImageFile(file, {
+        maxWidth: 400,
+        maxHeight: 400,
+        quality: 0.8
+      });
+      
+      setProfileImage(compressedBase64);
+    } catch (error) {
+      console.error('Erro ao processar imagem:', error);
+      alert('Erro ao processar a imagem. Tente novamente.');
     }
   };
 

@@ -7,17 +7,22 @@ const Layout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
 
-  const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: BarChart3, path: '/' },
-    { id: 'participants', label: 'Militares', icon: Users, path: '/participants' },
-    { id: 'groups', label: 'Grupos', icon: Shield, path: '/groups' },
-    { id: 'events', label: 'Eventos', icon: Calendar, path: '/events' },
-    { id: 'operadores', label: 'Operadores', icon: UserCheck, path: '/operadores' },
-    { id: 'reports', label: 'Relatórios', icon: TrendingUp, path: '/reports' },
-    { id: 'settings', label: 'Sobre', icon: Info, path: '/about' },
+  const allMenuItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: BarChart3, path: '/', roles: ['ADMIN', 'SUPERVISOR', 'OPERATOR'] },
+    { id: 'participants', label: 'Militares', icon: Users, path: '/participants', roles: ['ADMIN', 'SUPERVISOR', 'OPERATOR'] },
+    { id: 'groups', label: 'Grupos', icon: Shield, path: '/groups', roles: ['ADMIN', 'SUPERVISOR', 'OPERATOR'] },
+    { id: 'events', label: 'Eventos', icon: Calendar, path: '/events', roles: ['ADMIN', 'SUPERVISOR', 'OPERATOR'] },
+    { id: 'operadores', label: 'Operadores', icon: UserCheck, path: '/operadores', roles: ['ADMIN'] },
+    { id: 'reports', label: 'Relatórios', icon: TrendingUp, path: '/reports', roles: ['ADMIN'] },
+    { id: 'settings', label: 'Sobre', icon: Info, path: '/about', roles: ['ADMIN', 'SUPERVISOR', 'OPERATOR'] },
   ];
+
+  // Filtrar menu items baseado na role do usuário
+  const menuItems = allMenuItems.filter(item => 
+    item.roles.includes(user?.role || 'OPERATOR')
+  );
 
   const handleLogout = async () => {
     await logout();
